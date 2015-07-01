@@ -1,0 +1,203 @@
+/* Rappel :
+
+margin : top right bottom left 
+or margin : X Y 
+with X = top+bottom and Y = right+left
+
+box-shadow : x y blur(flou) spread(distance) color
+
+rem : unité de mesure root em
+em : 1em <=> 10 px ; 1.4em <=> 14px ; 2.4em <=> 24px
+
+Mais additivité des tailles (ex. liste dans une liste...)
+em relative à la taille de la fonte du parent
+
+rem : relative à l'élément racine : la balise html
+
+taille de police initiale de 62.5% pour bénéficier des mêmes avantages qu’un dimensionnement en px
+*/
+
+html,body {
+	font-size:100%;
+	width:100%;
+	height:100%;
+	overflow-x:hidden;
+	margin:0;
+	padding:0;
+}
+	
+body
+{
+	font-family: 'PT Sans', Arial, Verdana, Helvetica, sans-serif;	
+ 	background-image: url("../img/layout/bg_wh_wall.png");	 
+}
+
+/*
+.no-mobile #catch {
+	visibility: hidden;
+}
+*/
+	
+header {
+ 	overflow: hidden; /*Delete top margin*/
+	margin: 20px 6%; 
+}
+
+/* Main logo (How Fast) */
+/* Aspect ratio of the svg : 49%*/
+.hlogo {
+	width: 20%;
+	float: left;
+}
+
+/* Header sentence */
+#catch{
+ 	float: left; 
+	font-weight: bold;
+	width: 65%;
+	font-size: 2em;
+	padding-left: 2rem;
+	margin: 5px 20px;
+	color: rgb(142,35,35); 
+}
+
+/* Adding Multicolumn section (the row of columns) side margins  */	
+.mcol-section {
+	margin : 0 3%;	
+}
+
+/* Column parameters to make 3 columns in one section */
+.col{
+	float: left; /*Flottant*/
+	width : 27%;
+	margin: 0 3% ; 
+	font-size: 0.9em;
+	text-align: justify;
+}
+
+/* Arret du flottant left*/
+.cf {
+	clear: both;
+}
+
+.info-title{
+	font-weight: bold;
+	font-size: 1.35em;
+	color: rgb(255, 255, 255); 
+	text-align: center;	
+    padding: 0.3rem;
+    vertical-align: middle;
+}
+
+/* Customize element with red background, rounded corners and shadow */
+.shabox {
+	background: none repeat scroll 0 0 rgba(142, 35, 35, 1);
+    border: medium none;
+    border-radius: 0.2rem; /*0.1875rem;*/
+	box-shadow: 0 0.35rem 0.275rem -0.275rem rgba(0, 0, 0, 0.6);
+    color: #fff !important;
+}
+
+.important {
+	color: rgb(178, 42, 42);
+	font-weight: bold;
+}
+
+/* unvisited link */
+a:link {
+text-decoration: none;
+color: rgb(178, 42, 42);
+font-weight: bold;
+}
+
+/* visited link */
+a:visited {
+text-decoration: none;
+color: rgb(0,136,120);
+font-weight: bold;
+}
+
+/* mouse over link */
+a:hover {
+    color: rgb(0,136,120); /*0, 128, 128);*/
+}
+
+/* selected link */
+a:active {
+    color: rgb(0, 150, 80);
+}
+
+#contact {
+	float: left; /*Flottant*/
+	width : 80%;
+	margin: 15px 10% ; 
+	font-size: 1.1em;
+	font-weight: bold;
+	text-align: center;
+	vertical-align: middle;
+	box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2), 0px 1px 0px #FFF inset;
+}
+
+.no-mobile #start {
+	vertical-align: middle;
+	display: block;
+	padding-bottom: 1em;
+
+}
+
+.no-mobile #start-ok {
+	display: block;
+}
+
+.no-mobile #startkey
+{
+	margin-left: 25%;
+	background: url("../img/layout/startkey.png") no-repeat; /* center center;*/
+	width: 50%;
+	background-size: contain;
+	padding-bottom: 88.6%; /*Aspect ratio of the svg*/
+
+}
+#startlink {
+display: block;
+width: 100%;
+/*margin-left: 25%;*/
+background: none repeat scroll 0 0 rgba(142, 35, 35, 1);
+}
+
+.mobile #startlink
+{
+	visibility: hidden;
+}
+
+.lapin {
+	width: 56%;
+	margin-left: 22%;
+	margin-top: 15px;
+	}
+
+#forbidden-access
+{
+	color: rgb(255, 0, 0);
+	font-weight: bold;
+	font-size: 1.2em;
+	text-align: center;
+}
+
+/* Logos banner */
+#banlogo {
+	display: inline-block;
+	width: 94%;
+	margin: 20px 3%;
+	text-align: center;
+	box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2), 0px 1px 0px #FFF inset;
+}
+
+.logo {
+
+	height: 50px; 
+	vertical-align: top;
+	margin: 4px 4px;
+	text-align: center;
+}
+	

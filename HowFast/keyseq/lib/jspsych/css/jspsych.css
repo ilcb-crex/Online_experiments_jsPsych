@@ -1,0 +1,227 @@
+/* 
+ * CSS for jsPsych experiments.
+ *
+ * This stylesheet provides minimal styling to make jsPsych 
+ * experiments look polished without any additional styles.
+ *
+ *
+ */
+
+/*
+ * Font
+ */
+ 
+@import url(//fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700);
+
+html {
+ font-family: 'Open Sans', 'Arial', sans-serif;
+ font-size: 1.2 em; /*16px;*/
+ line-height: 1.4em;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+}
+
+p {
+    clear:both;
+}
+
+.very-small {
+    font-size: 50%;
+}
+
+.small {
+    font-size: 75%;
+}
+
+.large {
+    font-size: 125%;
+}
+
+.very-large {
+    font-size: 150%;
+}
+
+/*
+ * Container holding jsPsych content
+ */
+
+
+.jspsych-display-element {
+    width: 50%;
+    margin: 50px auto;
+	text-align: justify;
+}
+
+/*
+ * Classes for changing location of things
+ */
+ 
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.center-content {
+    text-align: center;
+}
+
+.exemple_text {
+    margin-left: 5em;	
+	font-size: 125%;
+}
+
+.exemple_image {
+	max-width: 20px;
+    margin-left: 5em;	
+}
+
+/*
+ * Classes for changing color (cf. Stroop)
+ */
+
+.red {
+    color: red;
+	margin-left: 5em;	
+	font-size: 125%;
+}
+
+.blue {
+    color: blue;
+	margin-left: 5em;	
+	font-size: 125%;
+}
+/*
+ * Form elements 
+ */
+
+.form_div {
+	width: 100%;
+	/*text-align: center;*/
+}
+
+.form_col {
+	display: inline-block;
+	margin-right: 15px;
+	padding: 3px 0px;
+	width: 40%; /*200px;*/
+	min-height: 1px;
+	text-align: right; /*center;*/
+}
+
+/* Add bottom margin to the form preamble */
+
+.form_preamble {		
+	margin-bottom: 30px;
+	text-align: left;
+}
+
+.radio_but {
+	margin-right: 10px;
+
+}
+	
+input[type="text"] {
+    text-align: center;
+}
+
+.form_subbutton {
+	margin-top: 10px;
+	margin-left: 10%;
+	text-align: center;
+}
+
+button {
+    padding: 0.5em;
+    background-color: rgb(225, 225, 225); 
+    border: 2px solid rgb(225, 225, 225);
+    font-size: 1em;
+    cursor: pointer;
+}
+
+button:hover {
+    border:2px solid rgb(200, 200, 200);
+}
+
+
+/*
+ * PLUGIN: jspsych-key-sequence
+ */
+ 
+/* Key typing sequence instruction */ 
+
+#jspsych-key-sequence {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+	margin-top: 35%;
+	text-align: center;
+	font-size: 72px;
+}
+
+#jspsych-key-seq-training {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+	margin-top: 50px;
+	text-align: center;
+	font-size: 32px;
+	color: red;
+}
+
+.stimseq 
+{
+	font-size: 20px;
+	margin-left: 20px;
+}
+#jspsych-typing-stimulus {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+	text-align: center;
+	
+	/*color: red;*/
+}
+
+#jspsych-typing-response {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+	vertical-align: bottom;
+	text-align: center;
+	color: red;
+}
+
+
+
+/*
+ *
+ * PLUGIN: jspsych-stroop
+ *
+ */
+ 
+#jspsych-stroop-bleu {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+	text-align: center;
+	vertical-align: center;
+	color: blue;
+	font-size: 22px;
+}
+
+#jspsych-stroop-rouge {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+	text-align: center;
+	vertical-align: center;
+	color: red;
+	font-size: 22px;
+}
+

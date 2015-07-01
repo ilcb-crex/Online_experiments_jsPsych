@@ -1,0 +1,401 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Finger Sequences test</title>
+		
+		<script src="js/jquery.js"></script>
+		<script src="js/whichbro.js" defer></script> 
+		
+		<script src="lib/soundmanager/script/soundmanager2.js"></script>
+		
+		<script> /* Preparation of the sound */
+			soundManager.url = 'lib/soundmanager/swf/'; 
+			soundManager.debugMode = false; //true;
+			
+			soundManager.onload = function() {
+				bad_sound = soundManager.createSound(
+				{
+					id : "bad_sound",
+					url : "sound/sound_bad.wav" // Attention pas de virgule ici !
+				});
+				good_sound = soundManager.createSound(
+				{
+					id : "good_sound",
+					url : "sound/sound_good.wav" // Attention pas de virgule ici !
+				});	
+			}
+		</script>
+		
+		<script src="lib/jspsych/jspsych.js"></script>
+		
+		<script src="lib/jspsych/plugins/jspsych-text.js"></script>
+		<script src="lib/jspsych/plugins/jspsych-key-sequence.js"></script>
+		<script src="lib/jspsych/plugins/jspsych-form.js"></script>
+		
+		<link href="lib/jspsych/css/jspsych.css" rel="stylesheet" type="text/css" />
+
+	</head>
+	
+	<body>
+	
+	</body>
+
+	<script> 
+
+		var subjectID =  'ID' + new Date().valueOf();
+
+		/* define welcome message block */
+		var welcome_block = {
+		  type: "text",
+		  text: "Bienvenue sur la fenêtre d'expérience ! Veuillez ne pas la redimensionner. Appuyer sur une touche pour commencer..."
+		};
+
+		/*------- Define INSTRUCTION BLOCKS */
+		
+		
+		/* General instruction block 1 */
+		var general_instr_block_1 = {
+			type: "text",
+			text: "<p class='large'>Test de séquence de frappes</p>" +
+				"<p> Vous allez devoir produire des séquences de 3 frappes au clavier en réponse" +
+				" à un stimulus visuel ('X' ou 'O').</p>" +
+				"<p> Lorsque vous verrez un des deux symboles apparaître à l'écran, vous devrez taper la séquence " +
+				"le plus rapidement possible et en faisant le moins d'erreurs possible.</p>" +
+				"<p> La tâche se divise en 4 parties. La séquence de frappes correspondant à chaque symbole " +
+				"('X' ou 'O') sera différente pour certaines parties.</p>" +
+				"<p> En début de partie, quelques essais vous permettront de vous entraîner à taper les séquences. </p>" +
+				"<p> Appuyez sur une touche pour continuer !</p>",
+			timing_post_trial: 2000
+		};
+
+		/* General instruction block 2 */
+		var general_instr_block_2 = {
+			type: "text",
+			text:"<p> Assurez-vous que le son de votre ordinateur est branché.</p>" +
+				"<p> Placez vos doigts sur les touches S, D, F et J, K, L de votre clavier,"+
+				"comme sur le dessin.</p>" +
+				"<div><img src='img/layout/handskeys.png' width=60%></div>" +
+				"<p> Appuyez sur la barre d'espace pour commencer...</p>",
+			cont_key: 32,
+			timing_post_trial: 2000
+		};
+
+		/* Training instruction block */
+		var training_instr_block = {
+			type: "text",
+			text: "<p class='large'>Entraînement</p>" +
+				"<p> Appuyez sur la barre d'espace pour commencer...</p>",
+			cont_key: 32,
+			timing_post_trial: 2000
+		};
+
+		/* Formulaire block (one page)*/
+		/* Define the form elements */
+		var form_elmt = new Array(
+			{
+			type : "radio",
+			idname : "manual",
+			quest : "Votre manualité : ",
+			radio_str : ["gauche", "droite"],
+			radio_id : ["left", "right"]
+			},
+			{
+			type : "radio",
+			idname : "sexe",
+			quest : "Vous êtes :",
+			radio_str : ["une femme", "un homme"],
+			radio_id : ["female", "male"]
+			},
+			{
+			type: "text",
+			idname: "age",
+			quest: "Votre âge :",
+			input_nchar: 3
+			}
+		);
+		
+		var form_block = {
+			type: "form",
+			form_struct: form_elmt,
+			preamble : "Quelques informations pour finir :",
+			submit : "Valider"
+		};
+		
+
+		var merci = "<p class='large'> Merci de votre participation ! Vous pouvez fermer cette fenêtre.</p>";
+			
+		
+	   /*------- Define STIMULATION BLOCKS */
+	   
+		/* Visual stimuli */
+		var stim = ['X','O'];
+		
+		/* Number of trials for each visual stimulus */
+		var nb_stim = [10, 10]; //[10, 10];
+		
+		/* Number of trials for each visual stimulus - FOR THE TRAINING BLOCK*/
+		var nb_trstim = [4, 4]; //[4, 4];
+	   
+	   /* Randomize sequence choice */
+		var rnd_hand = Math.round(Math.random());
+		
+		if ( rnd_hand == 0 ) {
+			/* Constant sequence at LEFT hand */
+			var seq_P2 = ['iam','iIm'];
+			var seq_P3 = ['iam','iaI'];
+		}else{
+			/* Constant sequence at RIGHT hand */
+			var seq_P2 = ['IAM','IiM'];
+			var seq_P3 = ['IAM','IAi'];
+		};
+		
+	   /* Randomize sequence orders (first appearing block as T2 or T3) */
+		var rnd_block = Math.round(Math.random());
+		var seq_blocks = new Array();
+
+		if ( rnd_block == 0 ) {
+			seq_blocks[0] = seq_P2;
+			seq_blocks[1] = seq_P3;
+		}else{
+			seq_blocks[0] = seq_P3;
+			seq_blocks[1] = seq_P2;
+		}
+		
+		/* Link between finger sequence letter name and keyboard typing letter */		
+		var decoder = ['iamIAM', 'fsdjlk'];
+				
+		/* Choice of the stimulus (X or O) for the constant sequence (supposing the same for the 2 blocks)*/	
+		/* The constant sequence is the first element = seq_blocks[0][0] and seq_blocks[1][0] */
+		var rnd_stim = Math.round(Math.random());
+		if ( rnd_stim == 0 ) {
+			stim = [stim[1], stim[0]];
+		};		
+		
+		/* Construct key-sequence blocks */		
+		var keyseq_blocks = new Array();
+		
+		for (var j = 0 ; j < seq_blocks.length ; j++) {
+			seq_fing = seq_blocks[j];
+			
+			/* Decoding first */
+			var seq_key = new Array();
+			
+			for (var k = 0 ; k < seq_fing.length ; k++) {
+				var seqf = seq_fing[k];
+				var seqk = [];
+				for (var m = 0 ; m < seqf.length ; m++) {
+					letf = seqf[m];
+					var idx = decoder[0].indexOf(letf);
+					seqk += decoder[1][idx];
+				}
+				seq_key[k] = seqk;
+			}
+			
+			var block = {
+				type: "key-sequence",
+				stim : stim,
+				nb_stim : nb_stim,
+				finger_seq : seq_fing,
+				key_seq : seq_key
+			};
+				
+			keyseq_blocks[j] = block;	
+		}
+		
+		
+	   /*------- Define STIMULI-SEQUENCE INSTRUCTIONS */
+	   
+		var keyseq_instr_blocks = new Array();
+	   
+		for (var i = 0 ; i < keyseq_blocks.length ; i++){
+	   
+			stims = keyseq_blocks[i].stim ;
+			
+			kseqs = keyseq_blocks[i].key_seq;
+			var stimseq = new Array();
+			var imp = 'img/instr/hk_';
+			
+			for (var j = 0 ; j < kseqs.length ; j++){				
+				stimseq[j] = imp + stims[j] + kseqs[j] + ".png";
+			};
+	   
+			keyseq_instr_blocks[i] = {
+				type: "text",
+				text: "<p> Pour cette partie, les séquences correspondant aux symboles O et X sont les suivantes:</p>" +
+					"<div><img src=" + stimseq[0] +" width=55%></div>" +
+					"<div><img src=" + stimseq[1] +" width=55%></div>" +
+					"<p> Essayez de reproduire maintenant les séquences plusieurs fois, afin de vous familiariser.</p>"+
+					"<p> Quelques essais d'entraînement vont suivre, jusqu'à ce que vous tapiez huit sequences " +
+					"consécutives sans erreur. </p>" +
+					"<p> Un son aigu indiquera si la séquence tapée est correcte, un son plus grave sinon.</p>" +
+					"<p> Appuyez sur la barre espace pour continuer !</p>",
+				cont_key: 32,
+				timing_post_trial: 2000
+			};
+		};
+		
+		/* Indicating the end of the training block - start of the real block */
+		go_instr_block = {
+			type: "text",
+			text: "<p class='large center-content'>Entraînement réussi ! Tenez-vous prêt, et appuyez sur la</p>" +
+				"<p class='large center-content'>barre d'espace pour commencer le test de rapidité !</p>",
+			cont_key: 32,
+			timing_post_trial: 2000
+		};
+				
+		
+		/*------- Define DEBRIEF BLOCKS */
+		function str2arr(strdata){
+			/* Remove brackets before spliting*/			
+			strdata = strdata.substring(1, strdata.length - 1);
+			var spstr = strdata.split(",");			
+			var numArray = [];
+			var k = 0;		
+			for (var i = 0; i < spstr.length ; i++) {
+				numArray[k] = parseInt(spstr[i]);
+				k++;
+			}
+			return numArray;
+		};
+		
+		function getSeqFb(nlast) {
+		
+			var trials = jsPsych.data.getTrialsOfType('key-sequence');
+						
+			/* Average response time for typing - only for valid responses */
+			var sum_tt = 0;
+			var count = 0;
+			var valcount = 0;
+			
+			for (var i = trials.length - nlast; i < trials.length; i++) {
+				if(trials[i].valid > 0){
+					valcount = valcount + 1;
+					/* Typing time are return as string array by jsPsych.data.getTrialsOfType */
+					var vtt = str2arr(trials[i].typt);
+
+					for (var j = 0; j < vtt.length; j++) {
+						if (vtt[j] > 0) {
+							sum_tt = sum_tt + vtt[j];
+							count = count + 1;
+						}
+					}
+				}	
+			}
+			
+			var avg_tt = Math.floor(sum_tt / count);
+			var valid_perc = Math.round(100 * valcount / nlast);
+			return {avg_tt: avg_tt, valid_perc: valid_perc};
+		};
+			
+		function keyseq_debrief_block(nlast) {
+			var seq_debrief_block = {
+				type: "text",
+				text: function() {
+					var debf = getSeqFb(nlast);
+					return 	"<div class='large'><p>Résumé des mesures de la partie :</p> "+
+							"<p>Vitesse moyenne : <strong> "+ debf.avg_tt + " ms par touche</strong></p>"+
+							"<p>Pourcentage de séquences correctes :  <strong> "+ debf.valid_perc + " %</strong></p>" +
+							"<p>Tenez-vous prêt à reproduire les séquences, et appuyez sur la barre d'espace pour continuer...</p></div>";
+				},
+				cont_key: 32,
+				timing_post_trial: 1500
+			};
+			return seq_debrief_block;
+		};
+		
+
+		// Function for writing the data in mysql database
+		function save_data(data, subjinfo){
+
+		   $.ajax({
+			  type:'post',
+			  cache: false,
+			  url: 'db/db_save.php', 
+			  data: {
+				 subjid: subjectID,
+				 subjinfo: subjinfo,
+				 json: JSON.stringify(data)
+				},
+			  success: function(output) { console.log(output); } // write the result to javascript console
+		   });
+		} 
+
+
+		/* Create experiment definition array */
+		var experiment = [];
+		experiment.push(welcome_block);
+		experiment.push(general_instr_block_1);
+		experiment.push(general_instr_block_2);
+
+		var Nstim =  nb_stim.reduce(function(pv, cv) { return pv + cv; }, 0);
+		var Ntrstim =  nb_trstim.reduce(function(pv, cv) { return pv + cv; }, 0);
+		
+		for (var k = 0 ; k < keyseq_blocks.length ; k++) {	
+		 //var k = 0;
+			// Deep copy
+			var train_block = jQuery.extend(true, {}, keyseq_blocks[k]);
+			
+			train_block.nb_stim = nb_trstim;
+			train_block.training = true;
+			
+			var looping_chunk = {
+				chunk_type: 'while',
+				timeline: [keyseq_instr_blocks[k], train_block], //[keyseq_instr_blocks[k], training_instr_block, train_block],
+				continue_function: function(){
+					var debf = getSeqFb( Ntrstim );
+					if(debf.valid_perc == 100) { 
+						return false; 
+					}else { 
+						return true; 
+					}
+				}
+			}
+		
+			experiment.push(looping_chunk); 
+			experiment.push(go_instr_block);
+			experiment.push(keyseq_blocks[k]);
+			experiment.push(keyseq_debrief_block( Nstim ));
+			experiment.push(keyseq_blocks[k]);
+			experiment.push(keyseq_debrief_block( Nstim ));
+		};
+		experiment.push(form_block);
+		
+
+		/* Start the experiment */
+		jsPsych.init({
+			experiment_structure: experiment,
+			on_finish: function(){ 	  
+
+				// Save all the data in the database
+				
+				// Adding user's browser and OS infos (as a unique string)
+				if (typeof WhichBrowser == "undefined") {
+					var subjinfo = 'Unable_to_use_whichbrowser_library';
+				}else{
+					Browsers = new WhichBrowser();
+				
+					var subjinfo = "";
+					subjinfo += 'OS_' + Browsers.os.name;
+					if (Browsers.os.version != null) {
+						subjinfo += '_' + Browsers.os.version;
+					}
+					subjinfo += '_Navigator_' + Browsers.browser.name+'_'+ Browsers.browser.version.original;
+					subjinfo += '_Devicetype_'+ Browsers.device.type;
+				};
+				
+				// All jsPsych data
+				var alldata = jsPsych.data.getData();	
+				
+				// Save 				
+				save_data(alldata, subjinfo); 
+				
+				// Add merci
+				$("body").html(merci);
+				
+			//	jsPsych.data.displayData(); 
+			}	
+		});	
+	</script> 
+
+</html>
