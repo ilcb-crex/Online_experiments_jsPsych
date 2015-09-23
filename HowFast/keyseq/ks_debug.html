@@ -9,7 +9,7 @@
 		<script>
 		  $(document).jsErrorHandler();
 		</script>
-		
+
 		<script src="js/polyfill.js"></script>
 		
 		<script src="js/whichbro.js" defer></script> 
@@ -17,7 +17,7 @@
 		<script src="lib/jspsych/jspsych.js"></script>
 		
 		<script src="lib/jspsych/plugins/jspsych-text.js"></script>
-		<script src="lib/jspsych/plugins/jspsych-key-sequence.js"></script>
+		<script src="lib/jspsych/plugins/jspsych-key-sequence.js"></script> 
 		<script src="lib/jspsych/plugins/jspsych-form.js"></script>
 		
 		<link href="lib/jspsych/css/jspsych.css" rel="stylesheet" type="text/css" />
@@ -26,10 +26,7 @@
 	</head>
 	
 	<body>
-		<span class="large"><p>Merci d'avoir bien voulu participer !</p>
-		<p>L'expérience ne se lance malheureusement pas correctement depuis votre navigateur.</p>
-		<p>Un rapport d'erreur a été envoyé... </p>
-		<p>N'hésitez pas à retenter plus tard ! </p> </span>
+		<span class="large">Rapport d'erreur envoyé... Merci de votre aide !</span>
 	</body>
 
 	<script> 
@@ -42,10 +39,10 @@
 		// json jspsych data at the end of the experiment
 
 		/* Number of trials for each visual stimulus - FOR THE TRAINING BLOCK*/
-		var nb_trstim = [4, 4]; //[4, 4];
+		var nb_trstim = [1, 1]; //[4, 4];
 		
 		/* Number of trials for each visual stimulus */
-		var nb_stim = [10, 10]; //[10, 10];
+		var nb_stim = [1, 1]; //[10, 10];
 		
 
 		/** -----------*/
@@ -80,7 +77,7 @@
 		/* Define welcome message block */
 		var welcome_block = {
 		  type: "text",
-		  text: "Bienvenue sur la fenêtre d'expérience ! " +
+		  text: "Bienvenue sur la fenêtre d'expérience ! (en MODE DEBUGAGE) <br />" +
 				"Veuillez ne pas la redimensionner. Appuyer sur une touche pour commencer..."
 		};
 		
@@ -265,7 +262,7 @@
 				nb_stim : nb_stim,
 				finger_seq : seq_fing,
 				key_seq : seq_key,
-				timing_interstim : 500
+				timing_post_trial : 500
 			};
 				
 			keyseq_blocks[j] = block;	
@@ -646,8 +643,8 @@
 				 subjid: subjectID,
 				 subjinfo: subjinfo,
 				 json: JSON.stringify(data)
-				} //,
-			 //  success: function(output) { console.log(output); } // write the result to javascript console
+				}//,
+			  //success: function(output) { console.log(output); } // write the result to javascript console
 		   });
 		} 
 		
@@ -708,7 +705,7 @@
 				experiment.push(keyseq_debrief_block()); 
 				iblock = iblock + 1;
 			}
-		}; 
+		};
 		
 		experiment.push(form_block);
 		
@@ -741,7 +738,7 @@
 					
 					// Save 
 					
-					save_data(alldata, subjinfo); 
+				//	save_data(alldata, subjinfo); 
 				}
 				
 				// Add merci

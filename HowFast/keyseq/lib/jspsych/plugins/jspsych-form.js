@@ -66,20 +66,25 @@
 		plugin.trial = function(display_element, trial) {
 			
 			// Evaluates the function if any
-			// trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial); //NEW
-		//	trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
+			 trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial); //NEW
+			//	trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
+			
+			// Clear the display
+			display_element.html(' ');
 			
 			// Show preamble text
-			display_element.append($('<div>', {
-				id : 'preamb',
-				class : 'form_preamble',
-				html : trial.preamble
-			}));
+			var $prbdiv = $('<div/>')
+				.attr('id',"preamb")
+				.html(trial.preamble)
+				.addClass("form_preamble");	
+				
+			display_element.append($prbdiv);
 
-			display_element.append($('<div>', {
-				id : "theform",
-				class : "form_div"
-			}));
+			var $formdiv = $('<div/>')
+				.attr('id',"theform")
+				.addClass("form_div");	
+				
+			display_element.append($formdiv);
 			
 			// Add questions, input aeras and radio buttons
 			for (var i = 0; i < trial.nrow; i++) {
@@ -89,51 +94,57 @@
 				if (elm.type == 'text') {
 					
 					// Add question (label)
-					$('#theform').append($('<label>', {
-						class : "form_col",
-						for : elm.idname,
-						html : elm.quest
-					}));
+					var $qdiv = $('<label/>')
+						.attr("for",elm.idname)
+						.addClass("form_col")
+						.html(elm.quest);	
+											
+					$('#theform').append($qdiv);
 					
 					// $('#theform').append("<br />");
 					
 					// Add input area
-					$('#theform').append($('<input>', {
-						type: elm.type,
-						name : elm.idname,
-						id : elm.idname,
-						style : "width:" + elm.inpwidth +"em"
-					}));	
+					var $inpdiv = $('<input/>')
+						.attr({
+							type: elm.type,
+							id: elm.idname,
+							name: elm.idname,
+							style: "width:" + elm.inpwidth +"em"
+						});	
+						
+					$('#theform').append($inpdiv);	
 				}
 
 				// Radio type
 				if (elm.type == 'radio') {
 					
 					// Add question (span)
-					$('#theform').append($('<span>', {
-						class : "form_col",
-						html : elm.quest
-					}));
+					var $qrdiv = $('<span/>')
+						.addClass("form_col")
+						.html(elm.quest);	
+						
+					$('#theform').append($qrdiv);
 					// $('#theform').append("<br />");
 					
 					for (var j = 0 ; j < elm.radiostr.length ; j++) {
 						
 						// Add radio labels
-						$('#theform').append($('<label>', {
-							for : elm.radioid[j],
-							id : "lab" + elm.radioid[j],
-							html : elm.radiostr[j]
-						}));
+						var $rlabdiv = $('<label/>')
+							.attr('id', "lab" + elm.radioid[j])
+							.attr("for", elm.radioid[j])
+							.html(elm.radiostr[j]);	
+						
+						$('#theform').append($rlabdiv);
 						
 						// And associated radio button
-					
-						$('#lab' + elm.radioid[j]).append($('<input>', {
-							type: elm.type,
-							name : elm.idname,
-							id : elm.radioid[j],
-							class : "radio_but",
-							value : elm.radioid[j]
-						}));	
+						var $rinpdiv = $('<input/>')
+							.attr("type", elm.type)
+							.attr('id', elm.radioid[j])
+							.attr("name", elm.idname)
+							.addClass("radio_but")
+							.attr("value", elm.radioid[j]);	
+						
+						$('#lab' + elm.radioid[j]).append($rinpdiv);	
 						/* // If you want first radio to be checked by default 
 						if (j==0) {
 							$('#'+elm.radioid[j]).attr("checked", true);
@@ -145,16 +156,15 @@
 			}
 			
 			// Add submit button
-			$('#theform').append($('<div>', { 
-				id : "subbut",
-				class : "form_subbutton"
-				}));
+			var $subm = $('<div />').attr('id',"subbut").addClass("form_subbutton");
+			$('#theform').append($subm);
 			
-			$('#subbut').append($('<button>', {
-				type : "button",
-				id : "submit",
-				html : trial.submit
-			}));
+			var $but = $('<button />')
+					.attr("type", "button")
+					.attr("id","submit")
+					.html(trial.submit);
+					
+			$('#subbut').append($but);
 			
 		  
 			$("#submit").click( function() {

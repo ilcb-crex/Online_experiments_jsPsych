@@ -11,12 +11,13 @@
  * Font
  */
  
-@import url(//fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700);
+/* @import url(//fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700); */
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700);
 
 html {
  font-family: 'Open Sans', 'Arial', sans-serif;
- font-size: 1.2 em; /*16px;*/
- line-height: 1.4em;
+ font-size: 1.2em; /*16px;*/
+ line-height: 1.3em;
 }
 
 body {
@@ -33,7 +34,7 @@ p {
 }
 
 .small {
-    font-size: 75%;
+    font-size: 85%;
 }
 
 .large {
@@ -44,8 +45,99 @@ p {
     font-size: 150%;
 }
 
+
 /*
- * Container holding jsPsych content
+ *
+ * Progress bar
+ *
+ */
+
+#progressbar-wrap {
+	overflow: auto;
+	width: 30%;
+	height: 50px;
+	/*background: rgb(255,168,168);*/
+	margin-left: 75%;
+	margin-top: -30px;
+}
+
+#progressbar-wrap-txt{
+	position: relative;
+	text-align: center;
+	font-size: 0.8em;
+	margin-top: 10px;
+	line-height: 0em;
+	/*font-weight: bold;*/
+	color: rgb(160, 160, 160);
+	
+}
+#progressbar-container {
+	width: 90%; /* width and height are arbitrary, just make sure the #bar styles are changed accordingly */
+	height: 19px;
+	border: 1px solid #888; 
+	background: rgb(168,168,168);
+	background: -moz-linear-gradient(top, rgba(168,168,168,1) 0%, rgba(204,204,204,1) 23%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(168,168,168,1)), color-stop(23%,rgba(204,204,204,1)));
+	background: -webkit-linear-gradient(top, rgba(168,168,168,1) 0%,rgba(204,204,204,1) 23%);
+	background: -o-linear-gradient(top, rgba(168,168,168,1) 0%,rgba(204,204,204,1) 23%);
+	background: -ms-linear-gradient(top, rgba(168,168,168,1) 0%,rgba(204,204,204,1) 23%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a8a8a8', endColorstr='#cccccc',GradientType=0 );
+	background: linear-gradient(top, rgba(168,168,168,1) 0%,rgba(204,204,204,1) 23%);
+	position: relative;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: -3px;
+}
+#progressbar-inner {
+	height: 18px; /* Not 30px because the 1px top-border brings it up to 30px to match #graph */
+	background: rgb(255,197,120); 
+	background: -moz-linear-gradient(top, rgba(255,197,120,1) 0%, rgba(244,128,38,1) 100%); 
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,197,120,1)), color-stop(100%,rgba(244,128,38,1))); 
+	background: -webkit-linear-gradient(top, rgba(255,197,120,1) 0%,rgba(244,128,38,1) 100%); 
+	background: -o-linear-gradient(top, rgba(255,197,120,1) 0%,rgba(244,128,38,1) 100%); 
+	background: -ms-linear-gradient(top, rgba(255,197,120,1) 0%,rgba(244,128,38,1) 100%); 
+	background: linear-gradient(top, rgba(255,197,120,1) 0%,rgba(244,128,38,1) 100%); 
+	border-top: 1px solid #fceabb;
+}
+
+/* Texte dans la progress bar*/
+#progressbar-inner p { 
+	position: absolute; 
+	text-align: center; 
+	width: 100%; 
+	margin: 0; 
+	line-height: 19px; 
+	font-size: 0.6em;
+	font-weight: bold;
+}
+ 
+
+#jspsych-progressbar-container {
+	color: #777;
+	border-bottom: 2px solid #dedede;
+	background-color: #f3f3f3;
+	margin-bottom: 1em;
+	text-align: center;
+	padding: 10px 0px;
+}
+
+#jspsych-progressbar-outer {
+	background-color: #dedede;
+	border-radius: 5px;
+	padding: 1px;
+	width: 800px;
+	margin: auto;
+}
+
+#jspsych-progressbar-inner {
+	background-color: #aaa; /* #3EB3D7; */
+	width: 0%;
+	height: 1em;
+	border-radius: 5px;
+}
+
+/*
+ * -- Container holding jsPsych content
  */
 
 
@@ -56,7 +148,7 @@ p {
 }
 
 /*
- * Classes for changing location of things
+ * -- Classes for changing location of things
  */
  
 .left {
@@ -82,7 +174,7 @@ p {
 }
 
 /*
- * Classes for changing color (cf. Stroop)
+ * -- Classes for changing color (cf. Stroop)
  */
 
 .red {
@@ -96,13 +188,20 @@ p {
 	margin-left: 5em;	
 	font-size: 125%;
 }
+
+.green {
+	color: green;
+}
+
+
 /*
- * Form elements 
+ * -- Form elements 
  */
 
 .form_div {
 	width: 100%;
-	/*text-align: center;*/
+	font-size: 1em;
+	/*margin-left: -20%;*/
 }
 
 .form_col {
@@ -118,6 +217,7 @@ p {
 
 .form_preamble {		
 	margin-bottom: 30px;
+	/*margin-left: -20%;*/
 	text-align: left;
 }
 
@@ -138,8 +238,9 @@ input[type="text"] {
 
 button {
     padding: 0.5em;
-    background-color: rgb(225, 225, 225); 
+    background-color: rgb(225, 225, 225); /*#eaeaea;*/
     border: 2px solid rgb(225, 225, 225);
+   /* color: #333;*/
     font-size: 1em;
     cursor: pointer;
 }
@@ -149,11 +250,51 @@ button:hover {
 }
 
 
+
 /*
- * PLUGIN: jspsych-key-sequence
+ * -- Debrief blocks with feedback about scores
+ */
+.scorerow {
+	margin-top: 20 px;
+	margin-left: 5%;
+	width: 120%;
+	/*border: 2px solid rgb(200, 200, 200);*/
+	
+}
+
+.score {
+	display: inline-block;
+	padding: 5px;
+	margin-right: 5px;
+	box-shadow: 0 0.35rem 0.275rem -0.275rem rgba(0, 0, 0, 0.6);
+	    border: medium none;
+    border-radius: 0.2rem; /*0.1875rem;*/
+	font-size: 0.95em;
+}
+.best_score{
+   /* padding: 0.5em;*/
+    background-color: rgb(48, 204, 86); /*rgb(72,204,101);*/
+ /*   border: 2px solid rgb(225, 225, 225);	*/
+}
+ 
+.worst_score{
+   /* padding: 0.5em;*/
+    background-color: rgb(225, 83, 44); /*rgb(225,104,76);*/
+  /*  border: 2px solid rgb(225, 94, 46);	*/
+}
+
+.middle_score{
+   /* padding: 0.5em;*/
+    background-color: rgb(220, 220, 220); /* Jaune : rgb(242, 194, 63); */
+    /* border: 2px solid rgb(225, 94, 46); */	
+}
+ 
+ 
+/*
+ * -- PLUGIN: jspsych-key-sequence
  */
  
-/* Key typing sequence instruction */ 
+/* Key typing symbole */ 
 
 #jspsych-key-sequence {
     display: block;
@@ -168,17 +309,29 @@ button:hover {
     display: block;
     margin-left: auto;
     margin-right: auto;
-	margin-top: 50px;
+	margin-top: 60px;
 	text-align: center;
 	font-size: 32px;
-	color: red;
 }
 
-.stimseq 
-{
+.stimseq {
 	font-size: 20px;
 	margin-left: 20px;
 }
+
+
+/* Button to test sound on instruction screen */
+
+#soundbutton {
+	font-size: 0.8em;
+	font-weight: bold;
+	margin-left: 20%;
+}
+
+/*
+ * -- PLUGIN: jspsych-wd-typing & img-typing
+ */
+ 
 #jspsych-typing-stimulus {
     display: block;
     margin-left: auto;
@@ -199,10 +352,9 @@ button:hover {
 
 
 
+
 /*
- *
- * PLUGIN: jspsych-stroop
- *
+ * -- PLUGIN: jspsych-stroop
  */
  
 #jspsych-stroop-bleu {

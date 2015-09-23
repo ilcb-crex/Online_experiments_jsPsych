@@ -17,6 +17,8 @@ rem : relative à l'élément racine : la balise html
 taille de police initiale de 62.5% pour bénéficier des mêmes avantages qu’un dimensionnement en px
 */
 
+@import url('http://fonts.googleapis.com/css?family=PT+Sans:400,700');
+
 html,body {
 	font-size:100%;
 	width:100%;
@@ -138,7 +140,7 @@ a:active {
 	box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2), 0px 1px 0px #FFF inset;
 }
 
-.no-mobile #start {
+#start {
 	vertical-align: middle;
 	display: block;
 	padding-bottom: 1em;
@@ -149,28 +151,30 @@ a:active {
 	display: block;
 }
 
-.no-mobile #startkey
-{
-	margin-left: 25%;
-	background: url("../img/layout/startkey.png") no-repeat; /* center center;*/
-	width: 50%;
-	background-size: contain;
-	padding-bottom: 88.6%; /*Aspect ratio of the svg*/
 
-}
-#startlink {
+/*#startlink {
 display: block;
-width: 100%;
+width: 100%;*/
 /*margin-left: 25%;*/
-background: none repeat scroll 0 0 rgba(142, 35, 35, 1);
+/*background: none repeat scroll 0 0 rgba(142, 35, 35, 1);
 }
+*/
+/*.mobile #start-ok
+{
+	visibility: hidden;
+}*/
 
-.mobile #startlink
+.mobile #startlink #startkey
 {
 	visibility: hidden;
 }
-
-.lapin {
+/*
+.mobile 
+{
+	visibility: hidden;
+}
+*/
+.no-mobile #startkey {
 	width: 56%;
 	margin-left: 22%;
 	margin-top: 15px;
@@ -178,7 +182,7 @@ background: none repeat scroll 0 0 rgba(142, 35, 35, 1);
 
 #forbidden-access
 {
-	color: rgb(255, 0, 0);
+	color: rgb(142, 35, 35);
 	font-weight: bold;
 	font-size: 1.2em;
 	text-align: center;

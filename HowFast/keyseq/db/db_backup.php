@@ -1,14 +1,14 @@
 <?php
 /*
-Backup SQL tables
-Adapted from the scripts given at : http://davidwalsh.name/backup-mysql-database-php
-With PDO commands : from the code given by "Lan"
+php.net
+----
+PDO::query : exécute une requête SQL, retourne un jeu de résultats en tant qu'objet PDOStatement
 
 */
 include("db_connect.php");
 // => return $dba object 
 
-backup_tables($dba, 'ks_test', '', false);
+backup_tables($dba, 'ks_data_v2', '', true);
 
 
 function backup_tables($dbh, $tables, $bkpath, $compflag) {
@@ -19,7 +19,7 @@ function backup_tables($dbh, $tables, $bkpath, $compflag) {
 	
 	$dbh -> setAttribute(PDO::ATTR_ORACLE_NULLS, PDO::NULL_NATURAL );
 
-	$nowtimename = time();
+	$nowtimename = date('Ymd\_Gis'); //time();
 
 	// Array of all database field types which just take numbers 
 	$numtypes = array('tinyint','smallint','mediumint','int','bigint','float','double','decimal','real');

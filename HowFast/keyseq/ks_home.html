@@ -6,8 +6,16 @@
 		<title>How Fast</title>
 		
 		<link rel="stylesheet" href="css/ks_home.css" />
-		<link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700' rel='stylesheet' type='text/css'/>
-		<script src="js/wurfl.js"></script>
+		<!-- <link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700' rel='stylesheet' type='text/css'/> -->
+		<script src="//wurfl.io/wurfl.js">
+			// WURFL Device Detection // http://web.wurfl.io/license	
+		</script>
+
+		<script src="js/jquery.js"></script>
+		<script src="js/jquery.onerror.js" type="text/javascript"></script>
+		<script>
+		  $(document).jsErrorHandler();
+		</script>
 		
 		<!-- Open online experiment in a full screen (S. Mathôt) cogsci.nl -->
 		<script>
@@ -42,7 +50,8 @@
 		
 			<div class="col"> 
 				<p class="info-title shabox">Comment ?</p>
-				<p>Cette expérience ne vous prendra que 5 minutes. Il vous sera demandé de reproduire une séquence de frappe lors de l'apparition d'un symbole sur l'écran.
+				<p>Cette expérience ne vous prendra que 5 minutes. Il vous sera demandé de reproduire des séquences de frappes lors de l'apparition d'un symbole sur l'écran. 
+				Vous devez posséder un clavier de type <b>Azerty</b> ou <b>Qwerty</b>, et un <b>navigateur récent</b>.
 					<span class="important">Les données collectées tout au long de cette expérience sont totalement anonymes.</span>
 				</p>				
 			</div>
@@ -52,7 +61,7 @@
 				<p>Cette étude est réalisée sous l'initiative de chercheurs de l'<a target="_blank" href="http://www.univ-amu.fr/">Université d'Aix-Marseille</a>. Elle est le fruit 
 				d'une collaboration entre le <a target="_blank" href="http://gsite.univ-provence.fr/gsite/document.php?pagendx=1031&project=lpc">Laboratoire de Psychologie Cognitive</a> 
 				et le <a target="_blank" href="http://sites.univ-provence.fr/lnc/">Laboratoire de Neurosciences Cognitives</a>,
-				et a bénificié du soutien du <a target="_blank" href="#">Centre de Ressources Expérimentales</a> du <a target="_blank" href="http://www.blri.fr/">Brain and Language Research Institute</a>. 
+				et a bénificié du soutien du <a target="_blank" href="http://blricrex.hypotheses.org/">Centre de Ressources Expérimentales</a> du <a target="_blank" href="http://www.blri.fr/">Brain and Language Research Institute</a>. 
 				</p>
 			</div>
 
@@ -64,20 +73,17 @@
 			
 			<div class="col"> 
 				<div id="contact">
-					<p>Des questions ?<br>Suivre l'avancée de l'étude ?<br>Contactez nous !<br>christelle.zielinski (at) blri.fr</p>
+					<p>Des questions ?<br>Suivre l'avancée de l'étude ?<br>Contactez nous !<br> svetlana.pinet (at) univ-amu.fr</p>
 				</div> 
 			</div>
 		
 			<div class="col"> 	
-				<div id="start"> 		
+				<div id="start"> 
+					<div id="no-start"></div>
 					<div class="start-ok">
-						<a href="#" onclick="openfullscreen('ks_exp.html'); return false;">
-							<img class="lapin" src="img/layout/startkey.png" title="Ouvre l'expérience dans une nouvelle fenêtre"/>
+						<a id = "startlink" href="#" onclick="openfullscreen('ks_exp.html'); return false;">
+							<img id="startkey" src="img/layout/startkey.png" title="Ouvre l'expérience dans une nouvelle fenêtre"/>
 						</a> 
-						<!--
-						<a id="startlink" href="#" onclick="openfullscreen('ks_exp.html'); return false;">
-							<div id="startkey"></div>
-						</a> -->
 					</div>
 				</div>
 			</div>	
@@ -115,12 +121,17 @@
 	</body>
 	
 	<script>
-	// Interdire l'acces si c'est une tablette/smartphone
-		document.documentElement.className += ' ' + (WURFL.is_mobile ? '' : 'no-') + "mobile";
-		if ( WURFL.is_mobile == true ) { //true
+		// Interdire l'acces si c'est une tablette/smartphone
+		if (typeof WURFL == 'undefined') {
+			var WURFL = {
+				is_mobile: false
+			};
+		}
+		document.documentElement.className += ' ' + (WURFL.is_mobile ? '' : 'no-') + 'mobile';
+		if ( WURFL.is_mobile == true ) { 
 			var pmob = document.createElement('p');
 			pmob.id = 'forbidden-access';
-			document.getElementById('start').appendChild(pmob);
+			document.getElementById('no-start').appendChild(pmob);
 			var txtmob = document.createTextNode("Cette expérience n'est accessible qu'aux utilisateurs de clavier mécanique (et non tactile).");
 			pmob.appendChild(txtmob);
 		}

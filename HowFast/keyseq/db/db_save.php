@@ -32,7 +32,7 @@
 
 //---- Name of the table
 
-$tname = 'ks_test';
+$tname = 'ks_data_v2';
 
 //---- Database connection
 
