@@ -1,4 +1,10 @@
 <!DOCTYPE html>   
+<!-- Home page with the link to launch the experiment in full screen
+
+AMU-BLRI-CREx 2015
+https://github.com/chris-zielinski/Online_experiments_jsPsych/tree/master/HowFast/keyseq
+
+-->
 <html>   
 	<head>  
 		<meta charset="utf-8" />
@@ -8,13 +14,16 @@
 		<link rel="stylesheet" href="css/ks_home.css" />
 		<!-- <link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700' rel='stylesheet' type='text/css'/> -->
 		<script src="//wurfl.io/wurfl.js">
-			// WURFL Device Detection // http://web.wurfl.io/license	
+			// WURFL Device Detection // http://web.wurfl.io	
 		</script>
 
 		<script src="js/jquery.js"></script>
-		<script src="js/jquery.onerror.js" type="text/javascript"></script>
+		
+		<script src="js/jquery.onerror.js" type="text/javascript">
+			// https://github.com/posabsolute/jQuery-Error-Handler-Plugin
+		</script>
 		<script>
-		  $(document).jsErrorHandler();
+			$(document).jsErrorHandler();
 		</script>
 		
 		<!-- Open online experiment in a full screen (S. Mathôt) cogsci.nl -->
@@ -59,8 +68,8 @@
 			<div class="col">
 				<p class="info-title shabox">Qui sommes-nous ?</p> 
 				<p>Cette étude est réalisée sous l'initiative de chercheurs de l'<a target="_blank" href="http://www.univ-amu.fr/">Université d'Aix-Marseille</a>. Elle est le fruit 
-				d'une collaboration entre le <a target="_blank" href="http://gsite.univ-provence.fr/gsite/document.php?pagendx=1031&project=lpc">Laboratoire de Psychologie Cognitive</a> 
-				et le <a target="_blank" href="http://sites.univ-provence.fr/lnc/">Laboratoire de Neurosciences Cognitives</a>,
+				d'une collaboration entre le <a target="_blank" href="http://lpc.univ-amu.fr/">Laboratoire de Psychologie Cognitive</a> 
+				et le <a target="_blank" href="http://lnc.univ-amu.fr/">Laboratoire de Neurosciences Cognitives</a>,
 				et a bénificié du soutien du <a target="_blank" href="http://blricrex.hypotheses.org/">Centre de Ressources Expérimentales</a> du <a target="_blank" href="http://www.blri.fr/">Brain and Language Research Institute</a>. 
 				</p>
 			</div>
@@ -95,9 +104,9 @@
 						<img class="logo" src="img/layout/logo_amu.png" alt="Logo AMU" title="Vers le site d'Aix-Marseille Université" /></a>
 					<a target="_blank" href="http://www.cnrs.fr/">
 						<img class="logo" src="img/layout/logo_cnrs.png" alt="Logo CNRS" title="Vers le site du CNRS" /></a>
-					<a target="_blank" href="http://sites.univ-provence.fr/lnc/">
+					<a target="_blank" href="http://lnc.univ-amu.fr/">
 						<img class="logo" src="img/layout/logo_lnc.png" alt="Logo LNC" title="Vers le site du Laboratoire de Neurosciences Cognitives" /></a>
-					<a target="_blank" href="http://gsite.univ-provence.fr/gsite/document.php?pagendx=1031&project=lpc">
+					<a target="_blank" href="http://lpc.univ-amu.fr/">
 						<img class="logo" src="img/layout/logo_lpc.png" alt="Logo LPC" title="Vers le site du Laboratoire de Psychologie Cognitive" /></a>
 					<a target="_blank" href="http://www.blri.fr/">
 						<img class="logo" src="img/layout/logo_blri.png" alt="Logo BLRI" title="Vers le site du Brain & Language Research Institute" /></a>
@@ -121,12 +130,14 @@
 	</body>
 	
 	<script>
+	
 		// Interdire l'acces si c'est une tablette/smartphone
 		if (typeof WURFL == 'undefined') {
 			var WURFL = {
 				is_mobile: false
 			};
 		}
+		
 		document.documentElement.className += ' ' + (WURFL.is_mobile ? '' : 'no-') + 'mobile';
 		if ( WURFL.is_mobile == true ) { 
 			var pmob = document.createElement('p');
