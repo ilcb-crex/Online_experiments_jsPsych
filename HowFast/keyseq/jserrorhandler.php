@@ -1,6 +1,6 @@
 <?php
 
-$to = "christelle.zielinski@blri.fr";
+$to = "mail@somewhere";
 $subject = 'A javascript error has been detected on '. $_GET['website'];
 $message = 'Error: '. $_GET['message']. '<br />';
 $message .= 'Url: '. $_GET['url']. '<br />';

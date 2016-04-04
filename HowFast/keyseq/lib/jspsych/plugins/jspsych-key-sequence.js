@@ -1,7 +1,7 @@
 /**
 * jspsych-key-sequence
-* TESTS
-
+* Plugin to display stimuli that aptempr
+*
 Training mode : l'exécution du bloc s'arrête dès qu'une erreur est effectuée
 
 **/

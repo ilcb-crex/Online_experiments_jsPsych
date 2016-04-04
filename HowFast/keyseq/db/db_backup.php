@@ -8,7 +8,7 @@ PDO::query : exécute une requête SQL, retourne un jeu de résultats en tant qu
 include("db_connect.php");
 // => return $dba object 
 
-backup_tables($dba, 'ks_data_v2', '', true);
+backup_tables($dba, 'data_table', '', true);
 
 
 function backup_tables($dbh, $tables, $bkpath, $compflag) {

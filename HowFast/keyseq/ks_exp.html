@@ -1,4 +1,29 @@
 <!doctype html>
+<!-- Key Sequence Experiment --
+
+Experiment to check for validity of the online collected typing times
+
+Based on Rosenbaum et al. results:
+Choosing Between Movement Sequences: A Hierarchical Editor Model
+J. of Experimental Psychology, 1984, Vol. 113, No. 3. 372-393
+
+A time effect is expected depending on the kind of key sequences that is typing 
+(Left or Right hand, finger position of the unconstant sequence)
+
+The finger sequence consistes of 3 successive typing keys by one of the finger
+of the Right or Left hand, implying index, ring and middle finger
+
+
+Construct with the help of Javascript library jsPsych
+The structure of the experiment is defined in the <script> section with the help of jsPsych 
+
+Aix-Marseille Université research project involving
+F.-X Alario (1), S. Dufau (1), M. Longcamp (2), S. Mathôt (1), S. Pinet (1), C. Zielinski (3)
+(1) Laboratoire de Psychologie Cognitive
+(2) Laboratoire de Neuroscience Cognitive
+(3) Brain and Language Research Institute (AMIDEx)
+
+--> 
 <html>
 	<head>
 		<meta charset="utf-8" />
@@ -26,6 +51,7 @@
 	</head>
 	
 	<body>
+		<!-- Message display on the page in the case of javascript bug encountered by the participant's navigator -->
 		<span class="large"><p>Merci d'avoir bien voulu participer !</p>
 		<p>L'expérience ne se lance malheureusement pas correctement depuis votre navigateur.</p>
 		<p>Un rapport d'erreur a été envoyé... </p>
@@ -89,10 +115,10 @@
 		var Npbar = 9;
 		/* Function to draw progress bar */
 		function putProgressBarStr(istep, Nstep){
-		var prop = istep / Nstep;
-		var strpbar = "<div id='progressbar-wrap'><p id='progressbar-wrap-txt'>Progression globale</p>"+
-						"<div id='progressbar-container'><div id='progressbar-inner' style='width:" + (prop*100) + "%'><p>Etape " + istep + "/"+ Nstep + "</p></div></div></div>"; //Math.round(prop*100) + "%
-			return strpbar;
+			var prop = istep / Nstep;
+			var strpbar = "<div id='progressbar-wrap'><p id='progressbar-wrap-txt'>Progression globale</p>"+
+							"<div id='progressbar-container'><div id='progressbar-inner' style='width:" + (prop*100) + "%'><p>Etape " + istep + "/"+ Nstep + "</p></div></div></div>"; //Math.round(prop*100) + "%
+				return strpbar;
 			
 		}
 		/**------- Define INSTRUCTION BLOCKS */
