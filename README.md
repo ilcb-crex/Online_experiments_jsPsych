@@ -1,9 +1,7 @@
 ## Online experiments using [jsPsych](http://www.jspsych.org/) JavaScript library 
 -
 ### HowFast / keyseq
-Experiment to collect typing time online for a research study conducted at Aix-Marseille University (France)
-
-Collect the keyboard typing times, as a response of visual stimulation
+Experiment to collect the keyboard typing times, as response to visual stimuli, for a research study conducted at Aix-Marseille University (France)
 
 Adapted jsPsych plugins : 
 
