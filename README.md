@@ -3,10 +3,13 @@
 ### <img src="https://github.com/chris-zielinski/Online_experiments_jsPsych/blob/master/HowFast/keyseq/img/layout/hf_logo.png" width="200"> 
 
 
-Experiment to collect the keyboard typing times, as response to visual stimuli, for research studies conducted at Aix-Marseille University (France)
+Experiment to collect the keyboard typing times, as response to visual stimuli, for research studies conducted at [Aix-Marseille University (France)](http://www.univ-amu.fr/en). 
 
 ### keyseq experiment
 Initial experiment to test for the validity of the typing time measurement.
+Research team :
+F.-X Alario<sup>1</sup>, S. Dufau<sup>1</sup>, M. Longcamp<sup>2</sup>, S. Mathôt<sup>1</sup>, S. Pinet<sup>1</sup>, C. Zielinski<sup>3</sup> (<sup>1</sup>[Laboratoire de Psychologie Cognitive](http://lpc.univ-amu.fr/) ; <sup>2</sup>[Laboratoire de Neuroscience Cognitive](http://lnc.univ-amu.fr/) ; <sup>3</sup>[Brain and Language Research Institute](http://www.blri.fr/))
+
 
 
 #### Project files
