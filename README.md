@@ -1,7 +1,7 @@
 ## Online experiments using [jsPsych](http://www.jspsych.org/) JavaScript library 
 
-### HowFast <img src="https://github.com/chris-zielinski/Online_experiments_jsPsych/blob/master/HowFast/keyseq/img/layout/hf_logo.png" width="200"> 
-----
+### <img src="https://github.com/chris-zielinski/Online_experiments_jsPsych/blob/master/HowFast/keyseq/img/layout/hf_logo.png" width="200"> 
+
 
 Experiment to collect the keyboard typing times, as response to visual stimuli, for research studies conducted at Aix-Marseille University (France)
 
