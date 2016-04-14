@@ -1,13 +1,23 @@
 <?php
+/* Database connection to save data from the online experiment using PDO
+Table name is defined here too.
+
+
+CREx-BLRI-AMU project :
+https://github.com/chris-zielinski/Online_experiments_jsPsych/tree/master/HowFast/keyseq
+*/
 
 //---------------------
 // Connection parameters
 
 $hname = "localhost";
-$dname = 'my_dbname';
+$dname = 'your_db_name'; // Database name
 
-$usern =  'my_username';  
-$pword =  'roger_rabbit'; 
+$usern =  'your_user_name';  	// User name
+$pword =  'your_password'; 		// Password
+
+//---- Name of the table used to store the data
+$tname = 'name_of_the_table';
 
 //---------------------
 // Database connection

@@ -1,6 +1,11 @@
 <?php
+/** Spy to get JavaScript error that is occuring in the user's browser
+https://github.com/posabsolute/jQuery-Error-Handler-Plugin
 
-$to = "mail@somewhere";
+Set your e-mail address here
+*/
+
+$to = "christelle.zielinski@blri.fr";  // Set your e-mail here
 $subject = 'A javascript error has been detected on '. $_GET['website'];
 $message = 'Error: '. $_GET['message']. '<br />';
 $message .= 'Url: '. $_GET['url']. '<br />';

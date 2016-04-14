@@ -1,11 +1,10 @@
 <?php
-
-// Saving the data to mySQL database - using PDO 
-// jsPsych data are submitted as a unique string (json-encoded object)
-// In the main script (where experiment is defined) :
-/*  function save_data(data){   
-    // adapted from J. de Leeuw (jsPsych tutorial)
-
+/*
+Saving the data to mySQL database - using PDO 
+jsPsych data are submitted as a unique string (json-encoded object)
+In the main script (where experiment is defined) :
+	function save_data(data){   
+		// adapted from J. de Leeuw (jsPsych tutorial)
         $.ajax({
           type:'post',
           cache: false,
@@ -25,18 +24,23 @@
             save_data(alldata); 
         }   
     });
+
+The database must contain the table $tname with at least 
+the 3 columns : subjID, subjinfo and jsonData
+The table is created if it doesn't exist yet.
+
+CREx-BLRI-AMU project :
+https://github.com/chris-zielinski/Online_experiments_jsPsych/tree/master/HowFast/keyseq
 */
-// The database must contain the table $tname with at least 
-// the 3 columns : subjID, subjinfo and jsonData
-// New table is creating if it doesn't exist
 
-//---- Name of the table
-
-$tname = 'ks_data_v2';
 
 //---- Database connection
+// Return database object ($dba)
+// and the name of the table ($tname variable)
 
 include("db_connect.php");
+// => $dba
+// => $tname 
 
 //---------------------
 // Create $tname table if not yet

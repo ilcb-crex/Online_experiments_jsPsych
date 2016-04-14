@@ -1,6 +1,12 @@
 <!doctype html>
 <!-- Key Sequence Experiment --
 
+Online experiment based on jsPsych javascript library
+
+jsPsych documentation: docs.jspsych.org
+de Leeuw, J. R. (2014). jsPsych: A JavaScript library for creating behavioral 
+experiments in a Web browser. Behavior research methods, 1-12
+
 Experiment to check for validity of the online collected typing times
 
 Based on Rosenbaum et al. results:
@@ -23,6 +29,7 @@ F.-X Alario (1), S. Dufau (1), M. Longcamp (2), S. Mathôt (1), S. Pinet (1), C.
 (2) Laboratoire de Neuroscience Cognitive
 (3) Brain and Language Research Institute (AMIDEx)
 
+CREx-BLRI-AMU project :
 https://github.com/chris-zielinski/Online_experiments_jsPsych/tree/master/HowFast/keyseq
 
 --> 
@@ -32,15 +39,24 @@ https://github.com/chris-zielinski/Online_experiments_jsPsych/tree/master/HowFas
 		<title>Key Sequences experiment</title>
 
 		<script src="js/jquery.js"></script>
+		
+		<!-- spy to send JavaScript errors when occurs on user's browser		
+		Simply set your email in the file jserrorhandler.php in the project directory 
+		AND uncomment the following line containing: $(document).jsErrorHandler();-->
 		<script src="js/jquery.onerror.js" type="text/javascript"></script>
-		<script>
-		  $(document).jsErrorHandler();
+		<script> 
+			$(document).jsErrorHandler();
 		</script>
 		
+		<!-- polyfill hold javascript functions that could be missing to older browsers -->
 		<script src="js/polyfill.js"></script>
 		
+		<!-- tool to get OS/browser informations 
+		Work only when experiment is online (on a server)
+		Add the path of the WhichBrowser library inside the whichbro.js file -->
 		<script src="js/whichbro.js" defer></script> 
 		
+		<!-- jsPsych core & plugings + CSS -->
 		<script src="lib/jspsych/jspsych.js"></script>
 		
 		<script src="lib/jspsych/plugins/jspsych-text.js"></script>
@@ -291,8 +307,8 @@ https://github.com/chris-zielinski/Online_experiments_jsPsych/tree/master/HowFas
 				type: "key-sequence",
 				stim : stim,
 				nb_stim : nb_stim,
-				finger_seq : seq_fing,
 				key_seq : seq_key,
+				finger_seq : seq_fing,
 				timing_interstim : 500
 			};
 				
@@ -613,10 +629,7 @@ https://github.com/chris-zielinski/Online_experiments_jsPsych/tree/master/HowFas
 		}
 		
 		/**------- DEBRIEF BLOCKS function */
-/*		function keyseq_summstr(avgtt, valperc){
-			return "<p>Vitesse de frappe moyenne : <strong> "+ avgtt + " s par touche</strong></p>"+
-					"<p>Pourcentage de séquences correctes :  <strong> "+ valperc + " %</strong></p>"; 
-*/						
+						
 		function keyseq_debrief_block() {
 			var seq_debrief_block = {
 				type: "text",

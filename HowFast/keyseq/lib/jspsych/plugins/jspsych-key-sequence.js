@@ -1,10 +1,123 @@
 /**
 * jspsych-key-sequence
-* Plugin to display stimuli that aptempr
+* Adapted from Josh de Leeuw plugin : jspsych-multi-stim-multi-response
+* 
+* Very specific plugin for the HowFast/keyseq experiment running with jsPsych
 *
-Training mode : l'exécution du bloc s'arrête dès qu'une erreur est effectuée
-
+* A set of visual stimulus is displayed. Depending on the stimulus, a sequence of keys is
+* expected to be typed by the user. Typing times of the sequence of keys are recorded
+* for each stimulus.
+*
+* After the sequence was typed, the color of the stimulus is changing to green (success)
+* or red (mistake).
+*
+* Stimulus is a character appearing on the screen (ex. "O" or "X"). 
+* A specific sequence of keys is attempted to be typed by the user
+* as response to the stimulus (ex. "FSD" sequence as response to "X" and "JLK" key 
+* sequence as response to "O")
+*
+* The trial ends when the number of expected keys is typed after the display 
+* of the stimulus, regardless if the sequence was correclty reproduced or not
+* (ex. when 3 keys are typing associated with the expected response "FSD").
+*
+* The plugin manages an entire block of trials (succession of trials).
+*
+*
+* Plugin parameters :
+* --------------------
+*
+* Example of block definition in the experiment HTML file :
+*
+*		var block = {
+*			type: "key-sequence",
+*			stim : ['O','X'],   // Stimulus characters
+*			nb_stim : [10,10],  // Number of stimulus of each kind
+*			key_seq : ['fsd', 'fsj'],   // Corresponding keyboard letter sequence
+*			finger_seq : ['iam','iaI'],  // Finger sequence attempted for each kind
+*			timing_interstim : 500,     // Inter-stimulus duration (ms)
+*			training : false		// Training mode 
+*		};
+*
+*
+* --- stim : array of characters that figures each kind of visual stimulus 
+*
+* --- nb_stim : number of stimuli of each kind to be diplayed successively during the block of trials
+*
+*	  A RANDOMIZED ARRAY of stimuli is created to define the final display order at the plugin launch. 
+*     Example : from stim = ['O', 'X'] and nb_stim = [4, 2] 
+*			   => ['O', 'O', 'X', 'O', 'X', 'O'] should have been a possible result of the randomized 
+*                computation
+*
+* --- key_seq : corresponding sequence of keys associated with each kind of stimulus (stim array)
+*				and which is expected as correct answer 
+*
+*		If the sequence is correctly reproduced, the color of the stimulus changed to GREEN
+*   	for 650 ms ; it changes to RED if a mistake is done in the sequence. To change the duration 
+*		of the colored feedback, see at the end of the "after_response" function inside this script.
+*
+*
+* ----- Optional parameters :
+*
+*	--- training : if true, the block ends as soon as a sequence is not correctly typed
+*		This allows to remind the instructions, during the training block.
+*		A word ("REUSSI" (succeed) or "RATE" (failed)) is added below the stimulus in addition to the 
+* 		colored feedback.
+*		[ default : false ]
+*		A "conditional" chunk is defined in the experiment HTML file (see ks_exp.html) to allow the loop
+*		mistake / instruction ; and to end block when the required number of successive well-typed sequence 
+*		is reached.
+*
+* 	--- finger_seq : corresponding sequence of fingers implied in the expected response 
+*			The finger specification purpose is only instructive (to be joined to the output data that 
+*			are saved on the database). Can be useful for data processing.
+* 			Example : 	'iam' : sequence done only with the left hand : index - ring - middle
+*           			'iaI' : left index - left ring - RIGHT INDEX
+*						(with i : index ; a : annulaire (ring) and m : majeur (middle)
+* 						Lower case refers to the left hand ; upper case to the RIGHT)
+*
+* 	--- timing_stim : maximum duration of the stimulus presentation in miliseconds
+*			The stimulus disapears after timing_stim ms (if the response sequence was not typed before).
+*			[ default : infinite ]
+*	
+*	--- timing_response : maximum duration to give the key sequence before the ending of the trial 
+*			(in miliseconds)
+*			[ default : infinite ]
+* 
+*
+* The layout, including the font size of the stimuli and its position on the page, is set in the CSS 
+* script (jspsych / css / jspsych.css) - for id "#jspsych-key-sequence" and class "stimseq" :
+*
+* #jspsych-key-sequence {
+*    display: block;
+*    margin-left: auto;
+*    margin-right: auto;
+*	 margin-top: 35%;
+*	 text-align: center;
+*	 font-size: 72px;
+*  }
+*
+* .stimseq {
+*	 font-size: 20px;
+*	 margin-left: 20px;
+*  } 
+*
+*
+* Output data :
+* -------------
+*
+* for each stimulus, the typing key codes (ascii codes) : key_press ; the associated letters (key_chars) and typing times 
+* an indication if the answer was correct and if the training was activated 
+*
+*
+* CREx--BLRI--AMU--2016
+* https://github.com/chris-zielinski/Online_experiments_jsPsych
+*
+* jsPsych documentation: docs.jspsych.org
+* de Leeuw, J. R. (2014). jsPsych: A JavaScript library for creating behavioral 
+* experiments in a Web browser. Behavior research methods, 1-12
+*
 **/
+
 
 (function($) {
 	jsPsych["key-sequence"] = (function() {
@@ -12,11 +125,18 @@ Training mode : l'exécution du bloc s'arrête dès qu'une erreur est effectuée
 		var plugin = {};
 
 		plugin.create = function(params) {
-			// Create randomized stimuli array 
+			// Create randomized stimuli array according to the number of stimulus required for each kind of stimulus 
 			/* The block of visual stimuli with a randomized order of presentation */
 			var stim_arr =  jsPsych.randomization.repeat(params.stim, params.nb_stim, 0);			
 		
 			var trials = new Array(stim_arr.length);
+			
+			if (typeof params.finger_seq === 'undefined') {
+				var fingspec = false;
+			}else{
+				var fingspec = true;
+			}
+			
 			for (var i = 0; i < stim_arr.length; i++) {			
 				trials[i] = {};
 				
@@ -24,7 +144,14 @@ Training mode : l'exécution du bloc s'arrête dès qu'une erreur est effectuée
 				trials[i].stim = stim_arr[i];
 				idx = params.stim.indexOf(stim_arr[i]);
 				trials[i].keys = params.key_seq[idx];
-				trials[i].fingers = params.finger_seq[idx];
+				
+				if (fingspec == true){
+					trials[i].fingers = params.finger_seq[idx];
+					trials[i].is_fing = 1;
+				}else {
+					trials[i].is_fing = 0;
+				}
+				
 
 				// Timing parameters
 				trials[i].timing_stim = params.timing_stim || -1; 
@@ -117,21 +244,34 @@ Training mode : l'exécution du bloc s'arrête dès qu'une erreur est effectuée
 					}
 						
 					// gather the data to store for the trial
-					var trial_data = {
-						"stimulus": trial.stim,
-						"key_seq": trial.keys,
-						"finger_seq": trial.fingers,
-						"key_press": JSON.stringify(responseKeys),
-						"key_char": responseChars,
-						"rt": JSON.stringify(responseTimes),
-						"typt": JSON.stringify(responseTypingTimes),
-						"valid": responseValidity,
-						"training": trial.training,
-						"trial_type": trialtyp
-					};
+					if (trial.is_fing == 1){
+						var trial_data = {
+							"stimulus": trial.stim,
+							"key_seq": trial.keys,
+							"finger_seq": trial.fingers,
+							"key_press": JSON.stringify(responseKeys),
+							"key_char": responseChars,
+							"rt": JSON.stringify(responseTimes),
+							"typt": JSON.stringify(responseTypingTimes),
+							"valid": responseValidity,
+							"training": trial.training,
+							"trial_type": trialtyp
+						};
+					} else {
+						var trial_data = {
+							"stimulus": trial.stim,
+							"key_seq": trial.keys,
+							"key_press": JSON.stringify(responseKeys),
+							"key_char": responseChars,
+							"rt": JSON.stringify(responseTimes),
+							"typt": JSON.stringify(responseTypingTimes),
+							"valid": responseValidity,
+							"training": trial.training,
+							"trial_type": trialtyp
+						};						
+					}
 					
 					jsPsych.data.write($.extend({}, trial_data, trial.data));
-
 
 					// clear the display
 					display_element.html('');
@@ -140,15 +280,7 @@ Training mode : l'exécution du bloc s'arrête dès qu'une erreur est effectuée
 					
 					// In the new version of jspsych, if timing_post_trial exists, the related time gap is added inside jspsych finishTrial module
 					jsPsych.finishTrial();
-					/*---- PREV
-					if (trial.timing_post_trial > 0) {
-						setTimeout(function() {
-							jsPsych.finishTrial();
-						}, trial.timing_post_trial);
-					} else {
-						jsPsych.finishTrial();
-					}
-					-----------*/
+
 				};
 
 				// function to handle responses by the subject		
@@ -166,6 +298,7 @@ Training mode : l'exécution du bloc s'arrête dès qu'une erreur est effectuée
 						
 						responseKeys.push(info.key);
 						responseChars = responseChars + String.fromCharCode(info.key).toLowerCase();
+						
 						// All the sequence caracters are typed
 						if (responseChars.length == trial.keys.length) {						
 							if(responseTimes.length === 0){
@@ -187,11 +320,11 @@ Training mode : l'exécution du bloc s'arrête dès qu'une erreur est effectuée
 
 								};
 							};
+							
 							// Let time to see the feedback color of the symbol (correct : green, error : red)
-
 							setTimeout( function(){
 									end_trial();
-								}, 650); //500
+								}, 650); 
 						};
 					
 					};

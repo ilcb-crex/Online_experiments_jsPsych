@@ -1,8 +1,17 @@
+/** Spy to get JavaScript error that is occuring in the user's browser
+https://github.com/posabsolute/jQuery-Error-Handler-Plugin
+
+Set your e-mail address inside jserrorhandler.php script
+
+* CREx--BLRI--AMU--2016
+* https://github.com/chris-zielinski/Online_experiments_jsPsych
+*/
+
 (function( $ ){
   $.fn.jsErrorHandler = function(options) {
   	
 	var settings = {
-		from: "support@howfast-keyseq.com",
+		from: "support@howfast-typing.com",
 		website: document.domain
 	}
 	if (options) $.extend(settings, options);

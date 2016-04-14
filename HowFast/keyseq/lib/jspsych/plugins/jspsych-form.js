@@ -1,13 +1,80 @@
 /**
  * jspsych-form
- * A jspsych plugin for displaying one form page with 
- * free input texts and/or radio-button choices
- *
- *
- * Adapted from jspsych-survey-text plugin 
- * (Josh de Leeuw documentation: docs.jspsych.org)
- * by the CREx - 20150624
- */
+* A jspsych plugin for displaying one form page with 
+* free input texts and/or radio-button choices
+*
+*
+* Adapted from jspsych-survey-text plugin 
+*
+* Input parameters :
+* -----------------
+* --- type : kind of response to display : 'text' or 'radio'
+*			'text' : the user can give free answer in the input text field
+*			'radio' : the user selects a unique answer amongst options ((by clicking on the radio button)
+*
+* --- idname : identification string to retrieve the associated answer in the jspsych recorded data
+*
+* --- quest : the question asked to the user
+*
+* If type is 'text':
+* --- input_nchar : width of the input text field in number of characters
+*
+* If type is 'radio' :
+* --- radiostr : option strings to display close to each radio button
+* --- radioid : identification string to retrieve the answer in jspsych data
+*
+* One row is diplayed on the survey page per sub-element of the block structure :
+* Example of block definition in the experiment HTML file :
+*
+* 		// Definition of the rows
+*		var form_elmt = new Array(
+*			{
+*			type : "radio",	
+*			idname : "manual",
+*			quest : "Your handedness : ",
+*			radio_str : ["left", "right"],
+*			radio_id : ["left", "right"]
+*			},						
+*			{
+*			type: "text",	
+*			idname: "age",  
+*			quest: "Your age :", 
+*			input_nchar: 3  
+*			},	
+*			{
+*			type: "radio",
+*			idname: "anyprob",
+*			quest: "Have you encountered any problem during the experiment ?",
+*			radio_str : ["yes", "no"],
+*			radio_id : ["prob_yes", "prob_no"]
+*			},
+*			{
+*			type: "text",
+*			idname: "anywhich",
+*			quest: "If yes, which kind ?",
+*			input_nchar: 30
+*			}
+*		);
+*		
+*		// Block definition (as a jspsych object)
+*		var form_block = {
+*			type: "form",
+*			form_struct: form_elmt,
+*			preamble : function(){
+*				return putProgressBarStr(Npbar,Npbar) + "Some informations pour finir :"
+*				},
+*			submit : "Valider"
+*		};
+*
+*		
+* CREx--BLRI--AMU--2015
+* https://github.com/chris-zielinski/Online_experiments_jsPsych
+*
+* jsPsych documentation: docs.jspsych.org
+* de Leeuw, J. R. (2014). jsPsych: A JavaScript library for creating behavioral 
+* experiments in a Web browser. Behavior research methods, 1-12
+*
+*/
 
 (function($) {
 	
