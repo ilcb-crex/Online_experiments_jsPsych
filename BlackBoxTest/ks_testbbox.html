@@ -1,0 +1,453 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Finger Sequences - Blackbox tests</title>
+		
+		<script src="js/jquery.js"></script>
+		<script src="js/whichbro.js" defer></script> 
+		<script src="js/math.min.js"></script>
+		
+		<script src="lib/jspsych/jspsych.js"></script>
+		
+		<script src="lib/jspsych/plugins/jspsych-text.js"></script>
+		<script src="lib/jspsych/plugins/jspsych-key-sequence.js"></script>
+		<script src="lib/jspsych/plugins/jspsych-form.js"></script>
+		
+		<link href="lib/jspsych/css/jspsych.css" rel="stylesheet" type="text/css" />
+
+		
+	</head>
+	
+	<body bgcolor="#000000">
+	
+	</body>
+
+	<script> 
+	
+		/** -----------
+		* Very Important Parameters */
+		
+		var isdemo = false;
+		// In demo mode, data are not saved in mySQL database 
+		
+		/* Number of trials for each visual stimulus */
+		var nb_stim = [1, 1]; //[10, 10];
+
+		/** -----------*/
+		
+
+		/* Define subject ID (based on an accurate start date - millisecond order precision) */
+		function datestr(sdat) {
+			function formatstr(num, dignum){
+				dignum = (typeof dignum =='undefined') ? 2 : dignum;
+				var numstr = num.toString();
+				if (numstr.length < dignum) {
+					for (var j = 0 ; j < dignum - numstr.length ; j++) {				
+						numstr = "0" + numstr;
+					}
+				}
+				return numstr;
+			}
+			var sy = sdat.getFullYear();
+			var smo = formatstr(sdat.getMonth()+1);
+			var sda = formatstr(sdat.getDate());
+			var sho = formatstr(sdat.getHours());
+			var smi = formatstr(sdat.getMinutes());
+			var sse = formatstr(sdat.getSeconds());
+			var sms = formatstr(sdat.getMilliseconds(), 3);
+			var strdat = sy + smo + sda + "_" + sho + smi + sse + "_" + sms;
+			
+			return strdat ;
+		}
+	
+		var subjectID =  'ID_' + datestr(new Date());
+		
+		/* Define welcome message block */
+		var welcome_block = {
+		  type: "text",
+		  text: "Bienvenue sur la fenêtre d'expérience ! " +
+				"Veuillez ne pas la redimensionner. Appuyer sur une touche pour commencer..."
+		};
+		
+
+		var Npbar = 40;
+		/* Function to draw progress bar */
+		function putProgressBarStr(istep, Nstep){
+		var prop = istep / Nstep;
+		var strpbar = "<div id='progressbar-wrap'><p id='progressbar-wrap-txt'>Progression globale</p>"+
+						"<div id='progressbar-container'><div id='progressbar-inner' style='width:" + (prop*100) + "%'><p>Etape " + istep + "/"+ Nstep + "</p></div></div></div>"; //Math.round(prop*100) + "%
+			return strpbar;
+			
+		}
+
+		
+	   /**------- Define STIMULATION BLOCKS */
+	   
+		/* Visual stimuli */
+		var stim = ['@','@'];
+		
+	   /* Randomize sequence choice */
+		var rnd_hand = Math.round(Math.random());
+		
+		if ( rnd_hand == 0 ) {
+			/* Constant sequence at LEFT hand */
+			var seq_P2 = ['iam','iIm'];
+			var seq_P3 = ['iam','iaI'];
+		}else{
+			/* Constant sequence at RIGHT hand */
+			var seq_P2 = ['IAM','IiM'];
+			var seq_P3 = ['IAM','IAi'];
+		};
+		
+	   /* Randomize sequence orders (first appearing block as T2 or T3) */
+		var rnd_block = Math.round(Math.random());
+		var seq_blocks = [];
+
+		if ( rnd_block == 0 ) {
+			//seq_blocks[0] = seq_P2;
+			//seq_blocks[1] = seq_P3;
+			//seq_blocks[2] = seq_P3;
+			seq_blocks[0] = seq_P2;
+seq_blocks[1] = seq_P2;
+seq_blocks[2] = seq_P2;
+seq_blocks[3] = seq_P2;
+seq_blocks[4] = seq_P2;
+seq_blocks[5] = seq_P2;
+seq_blocks[6] = seq_P2;
+seq_blocks[7] = seq_P2;
+seq_blocks[8] = seq_P2;
+seq_blocks[9] = seq_P2;
+		}else{
+seq_blocks[0] = seq_P2;
+seq_blocks[1] = seq_P2;
+seq_blocks[2] = seq_P2;
+seq_blocks[3] = seq_P2;
+seq_blocks[4] = seq_P2;
+seq_blocks[5] = seq_P2;
+seq_blocks[6] = seq_P2;
+seq_blocks[7] = seq_P2;
+seq_blocks[8] = seq_P2;
+seq_blocks[9] = seq_P2;
+		}
+		//for (var ii = 0 ; j < 40 ; ii++) {
+		//	seq_blocks[ii] = seq_P2;
+		//}
+		
+		/* Link between finger sequence letter name and keyboard typing letter */		
+		var decoder = ['iamIAM', 'fsdjlk'];
+				
+		/* Choice of the stimulus (X or O) for the constant sequence (supposing the same for the 2 blocks)*/	
+		/* The constant sequence is the first element = seq_blocks[0][0] and seq_blocks[1][0] */
+		var rnd_stim = Math.round(Math.random());
+		if ( rnd_stim == 0 ) {
+			stim = [stim[1], stim[0]];
+		};		
+		
+		/* Construct key-sequence blocks */		
+		var keyseq_blocks = [];
+		
+		for (var j = 0 ; j < seq_blocks.length ; j++) {
+			seq_fing = seq_blocks[j];
+			
+			/* Decoding first */
+			var seq_key = [];
+			
+			for (var k = 0 ; k < seq_fing.length ; k++) {
+				var seqf = seq_fing[k];
+				var seqk = [];
+				for (var m = 0 ; m < seqf.length ; m++) {
+					letf = seqf[m];
+					var idx = decoder[0].indexOf(letf);
+					seqk += decoder[1][idx];
+				}
+				seq_key[k] = seqk;
+			}
+			
+			var block = {
+				type: "key-sequence",
+				stim : stim,
+				nb_stim : nb_stim,
+				finger_seq : seq_fing,
+				key_seq : seq_key,
+				timing_post_trial : 500
+			};
+				
+			keyseq_blocks[j] = block;	
+		}
+		// Number of sub-sections of each sequence 
+		var Nsub = 2; // Global variable
+		
+		/*------ Define general name of the restitution party for the current experiment block*/
+		/* According to general index of the restitution block*/
+		function keyseq_block_info(iblock){
+			// Index of block begins by 0
+			iblock = iblock + 1;
+			
+			var r = iblock % Nsub;
+
+			// Number of the general part
+			var ipart = Math.ceil(iblock / Nsub);
+
+
+			if (r>0) {
+				var isub = iblock - (ipart-1)*Nsub;
+			}else{
+				var isub = Nsub;
+			}
+			var blockinfo = {
+				general_part :  String.fromCharCode(ipart+64),
+				current_subpart : isub,
+				idstr : String.fromCharCode(ipart+64)+"-"+ isub,
+				total_subpart : Nsub
+			};
+			return blockinfo;
+		}
+	   /**------- Define STIMULI-SEQUENCE INSTRUCTIONS */
+
+
+		/* Indicating the start of the real block */
+		/* Adding information about the general position of the block (phase + subpart number) */
+		function restitution_instr_block(iblock, istep) {
+			if(iblock==0){
+				return {
+					type: "text",
+					text: function(){				
+							return putProgressBarStr(istep, Npbar) + "Appuyer sur une touche pour commencer...";
+						},
+					timing_post_trial: 100	
+				};
+			}else{
+				return {
+					type: "text",
+					text: function(){				
+							return putProgressBarStr(istep, Npbar);
+						},
+					timing_stim: 100,
+					timing_post_trial: 100	
+				};					
+			}	
+		}	
+		
+		/**------- Define DEBRIEF BLOCKS */
+		/** Use a set of functions : */
+
+		/*------ Convert string array to array of numbers */
+		function str2arr(strdata){
+			/* Remove brackets before spliting*/			
+			strdata = strdata.substring(1, strdata.length - 1);
+			var spstr = strdata.split(",");			
+			var numArray = [];
+			var k = 0;		
+			for (var i = 0; i < spstr.length ; i++) {
+				numArray[k] = parseInt(spstr[i]);
+				k++;
+			}
+			return numArray;
+		};
+				
+
+		/* Get all Reaction Times + average */
+		function get_bbox_RT(trialtyp, allRTflag) {
+
+			// allRTflag = true : extract all the RTs of trials of type trialtyp
+			// allRTflag = flase : only the first RTs of each trial (default)
+			/* We could need only the first times in response of visual stimuli on the screen for bbox experiment*/
+			var allRTflag = (typeof allRTflag =='undefined') ? false : allRTflag;
+			var trials = jsPsych.data.getTrialsOfType(trialtyp);
+		
+			/* Average response time (only the first recording rt per trials) */
+			var sum_rt = 0;
+			var count = 0;
+			var rt = [];
+
+			for (var i = 0; i < trials.length; i++) {
+				/*Typing time are return as string array by jsPsych.data.getTrialsOfType */
+				var vrt = str2arr(trials[i].rt);
+
+				if (allRTflag) {
+					for (var j = 0; j < vrt.length; j++) {
+						if (vrt[j] > 0) {
+							rt.push(vrt[j]);
+							sum_rt = sum_rt + vrt[j];
+							count = count + 1;
+						};
+					};	
+				}else{
+					var j = 0; 
+					if (vrt[j] > 0) {
+						rt.push(vrt[j]);
+						sum_rt = sum_rt + vrt[j];
+						count = count + 1;
+					};
+				}					
+			};
+
+			var nb_rt = count;
+			var avg_rt = math.round(sum_rt / count, 1);		
+			var std_rt = math.round(math.std(rt),1);
+			// normalization : 'unbiased' (default) The sum of squared errors is divided by (n - 1)
+			var min_rt = math.min(rt);
+			var max_rt = math.max(rt);		
+
+			return {all_rt: rt, nb_rt: nb_rt, avg_rt: avg_rt, std_rt: std_rt, min_rt: min_rt, max_rt: max_rt};
+		};
+
+		/* Get all Typing Times + average */
+		function get_bbox_TT(trialtyp) {
+		
+			var trials = jsPsych.data.getTrialsOfType(trialtyp);
+		
+			/*Average response time for typing - only for valid responses*/
+			var sum_tt = 0;
+			var count = 0;
+			var tt = [];
+			
+			for (var i = 0; i < trials.length; i++) {
+
+				/*Typing time are return as string array by jsPsych.data.getTrialsOfType */
+				var vtt = str2arr(trials[i].typt);
+
+				for (var j = 0; j < vtt.length; j++) {
+					if (vtt[j] > 0) {
+						tt.push(vtt[j]);
+						sum_tt = sum_tt + vtt[j];
+						count = count + 1;
+					};
+				};				
+			};
+			
+			var nb_tt = count;
+			var avg_tt = math.round(sum_tt / count, 1);
+			var std_tt = math.round(math.std(tt), 1);
+			var min_tt = math.min(tt);
+			var max_tt = math.max(tt);		
+			return {all_tt: tt, nb_tt: nb_tt, avg_tt: avg_tt, std_tt: std_tt, min_tt: min_tt, max_tt: max_tt};
+		};
+		
+
+		function get_debrief() {
+				
+			var dbf_art = get_bbox_RT('key-sequence', true);
+			
+			var msg_art = "<p><strong>Temps de réaction - toutes les frappes</strong> <small> "+
+			"</small></p>"+
+			"<p> Nombre : " + dbf_art.nb_rt + "</p>" +
+			"<p> Moyenne : " + dbf_art.avg_rt + " ms</p>" +
+			"<p> Ecart-type : " + dbf_art.std_rt + " ms</p>"+
+			"<p> Min : " + dbf_art.min_rt + " ms</p>"+
+			"<p> Max : " + dbf_art.max_rt + " ms</p>"+
+			"<p> All_rt : [ " + dbf_art.all_rt + " ] ms</p>";
+			
+			var dbf_rt = get_bbox_RT('key-sequence', false);
+			var msg_rt = "<p><strong>Temps de réaction - premières frappes</strong> <small> "+
+			"(premières frappes enregistrées après chaque stimulus visuel)</small></p>"+
+			"<p> Nombre : " + dbf_rt.nb_rt + "</p>" +
+			"<p> Moyenne : " + dbf_rt.avg_rt + " ms</p>" +
+			"<p> Ecart-type : " + dbf_rt.std_rt + " ms</p>"+
+			"<p> Min : " + dbf_rt.min_rt + " ms</p>"+
+			"<p> Max : " + dbf_rt.max_rt + " ms</p>"+
+			"<p> All_rt : [ " + dbf_rt.all_rt + " ] ms</p>";
+			
+
+			var dbf_tt = get_bbox_TT('key-sequence');
+			var msg_tt = "<p><strong>Temps de frappe </strong>"+
+			"<small>(basés sur les écarts entre 2 frappes successives)</small></p>"+
+			"<p> Nombre : " + dbf_tt.nb_tt + "</p>" +
+			"<p> Moyenne : " + dbf_tt.avg_tt + " ms</p>" +
+			"<p> Ecart-type : " + dbf_tt.std_tt + " ms</p>"+
+			"<p> Min : " + dbf_tt.min_tt + " ms</p>" +
+			"<p> Max : " + dbf_tt.max_tt + " ms</p>"+
+			"<p> All_tt : [ " + dbf_tt.all_tt + " ] ms</p>";
+
+			endmsg = "<p><strong>jsPsych data</strong></p>";
+			var msg = "<div  class='bbox_debrief'><p class='large'>Key sequences - Bbox : " + subjectID +"</p>"+
+					msg_art + msg_rt + msg_tt + endmsg + "</div>" ;
+			return msg;			
+		};		
+		
+
+		/**------- STORE DATA TO MSQL DATABASE function */
+		// Function for writing the data in mysql database
+		function save_data(data, subjinfo, debriefstr){
+		   $.ajax({
+			  type:'post',
+			  cache: false,
+			  url: 'db/db_save.php', 
+			  data: {
+				 subjid: subjectID,
+				 subjinfo: subjinfo,
+				 json: JSON.stringify(data),
+				 dbfstr: debriefstr
+				},
+			  success: function(output) { console.log(output); } // write the result to javascript console
+		   });
+		} 
+		
+		/* Create experiment definition array */
+		var experiment = [];
+	/*	experiment.push(welcome_block);
+		experiment.push(general_instr_block_1);
+		experiment.push(general_instr_block_2);*/
+
+		var Nstim =  nb_stim.reduce(function(pv, cv) { return pv + cv; }, 0);
+		
+		// Number of parts (Np with 2 sub-parts)
+		var Np = keyseq_blocks.length;
+		// Number of sub-parts : Nsub previously defined
+		
+		var iblock = 0;
+		for (var k = 0 ; k < Np ; k++) {				
+			for (var isp = 0 ; isp < Nsub ; isp++) {
+				var ibarstep = isp + 1 + k*2;
+				experiment.push(restitution_instr_block(iblock, ibarstep));
+				experiment.push(keyseq_blocks[k]);
+			//	experiment.push(keyseq_debrief_block()); 
+				iblock = iblock + 1;
+			}
+		};
+	//	experiment.push(form_block);
+		
+
+		/* Start the experiment */
+		jsPsych.init({
+			experiment_structure: experiment,
+			on_finish: function(){ 	  
+
+				// Save all the data in the database
+				// Save all the data in the database
+				if (!isdemo){				
+					// Adding user's browser and OS infos (as a unique string)
+					if (typeof WhichBrowser == "undefined") {
+						var subjinfo = 'Unable_to_use_whichbrowser_library';
+					}else{
+						Browsers = new WhichBrowser();
+					
+						var subjinfo = "";
+						subjinfo += 'OS_' + Browsers.os.name;
+						if (Browsers.os.version != null) {
+							subjinfo += '_' + Browsers.os.version;
+						}
+						subjinfo += '_Navigator_' + Browsers.browser.name+'_'+ Browsers.browser.version.original;
+						subjinfo += '_Devicetype_'+ Browsers.device.type;
+					};
+					
+					// All jsPsych data
+					var alldata = jsPsych.data.getData();	
+					// Save the final debrief screen text
+					var dbfstr = get_debrief();
+					
+					// Save 				
+					save_data(alldata, subjinfo, dbfstr); 
+				}
+				
+				// Add merci
+				$("body").removeClass("jspsych-display-element").html(dbfstr);
+				
+				// Display all data on the page (debug mode)
+				jsPsych.data.displayData(); 
+			}	
+		});	
+	</script> 
+
+</html>
