@@ -16,4 +16,4 @@
 *.rtf	 diff=astextplain
 *.RTF	 diff=astextplain
 
-Howfast/keyseq/lib/whichbrowser linguist-vendored
+HowFast/keyseq/lib/whichbrowser/* linguist-vendored
