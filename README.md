@@ -14,11 +14,11 @@ F.-X Alario<sup>1</sup>, S. Dufau<sup>1</sup>, M. Longcamp<sup>2</sup>, S. Math√
 
 #### Project files
 
-<img src="https://github.com/chris-zielinski/Online_experiments_jsPsych/blob/master/keyseq_files.png" width="400"> 
+<img src="keyseq_files.png" width="400"> 
 
 #### Experimental design
 
-<img src="https://github.com/chris-zielinski/Online_experiments_jsPsych/blob/master/keyseq_design.png" width="800"> 
+<img src="keyseq_design.png" width="800"> 
 
 
 #### Adapted jsPsych plugins
