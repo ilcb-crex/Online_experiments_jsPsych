@@ -90,13 +90,13 @@ p {
 }
 #progressbar-inner {
 	height: 18px; /* Not 30px because the 1px top-border brings it up to 30px to match #graph */
-	background: rgb(255,197,120); 
-	background: -moz-linear-gradient(top, rgba(255,197,120,1) 0%, rgba(244,128,38,1) 100%); 
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,197,120,1)), color-stop(100%,rgba(244,128,38,1))); 
-	background: -webkit-linear-gradient(top, rgba(255,197,120,1) 0%,rgba(244,128,38,1) 100%); 
-	background: -o-linear-gradient(top, rgba(255,197,120,1) 0%,rgba(244,128,38,1) 100%); 
-	background: -ms-linear-gradient(top, rgba(255,197,120,1) 0%,rgba(244,128,38,1) 100%); 
-	background: linear-gradient(top, rgba(255,197,120,1) 0%,rgba(244,128,38,1) 100%); 
+	background: rgb(0,206,190,1); 
+	background: -moz-linear-gradient(top, rgba(0,206,190,1) 0%, rgba(0,156,140,1)) 100%); 
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,206,190,1))), color-stop(100%,rgba(0,156,140,1))); 
+	background: -webkit-linear-gradient(top, rgba(0,206,190,1) 0%,rgba(0,156,140,1) 100%); 
+	background: -o-linear-gradient(top, rgba(0,206,190,1) 0%,rgba(0,156,140,1) 100%); 
+	background: -ms-linear-gradient(top, rgba(0,206,190,1) 0%,rgba(0,156,140,1) 100%); 
+	background: linear-gradient(top, rgba(0,206,190,1) 0%,rgba(0,156,140,1) 100%); 
 	border-top: 1px solid #fceabb;
 }
 
