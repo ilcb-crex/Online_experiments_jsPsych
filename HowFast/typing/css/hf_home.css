@@ -1,0 +1,349 @@
+/***
+Layout for the introduction page of the HowFast experiment (typing)
+-----
+CREx-BLRI-AMU project :
+https://github.com/chris-zielinski/Online_experiments_jsPsych/tree/master/HowFast/typing
+*/
+
+@import url('http://fonts.googleapis.com/css?family=PT+Sans:400,700');
+
+
+html,body {
+	width:100%;
+	overflow-x:hidden;
+	padding:0;
+}
+	
+body
+{
+	font-family: 'PT Sans', Arial, Verdana, Helvetica, sans-serif;	
+ 	background-image: url("../img/layout/bg_wh_wall.png");
+	max-width: 1200px;	
+	margin-left: auto;
+	margin-right: auto;
+}
+
+
+header {
+ 	overflow: hidden; /*Delete top margin*/
+	margin: 20px 6%; 
+}
+
+/* ---------------- */
+/*      HEADER      */
+/* ---------------- */
+
+/* Main logo (How Fast) */
+/* Aspect ratio of the svg : 49%*/
+.hlogo {
+	width: 20%;
+	float: left;
+}
+
+
+/* Header sentence */
+#catch{
+ 	float: left; 
+	font-weight: bold;
+	width: 65%;
+	font-size: 34px;
+	padding-left: 2rem;
+	margin: 5px 20px;
+	color: rgb(152,35,35); 
+}
+
+/* ---------------- */
+/*   3 COLUMNS      */
+/* ---------------- */
+
+/* Column parameters to make 3 columns in one section */
+.col{
+	float: left; /*Flottant is important !*/
+	width : 27%;
+	margin: 0 3% ; 
+	font-size: 16px; 
+	text-align: justify;
+}
+
+/* Arret du flottant left*/
+.cf {
+	clear: both;
+}
+
+/* TITLE BOX */
+.info-title{
+	font-weight: bold;
+	font-size: 20px;
+	color: rgb(255, 255, 255); 
+	text-align: center;	
+    padding: 0.3rem;
+    vertical-align: middle;
+}
+
+/* Customize element with red background, rounded corners and shadow */
+.shabox {
+	background: none repeat scroll 0 0 rgba(142, 35, 35, 1);
+    border: medium none;
+    border-radius: 0.2rem; 
+	box-shadow: 0 0.35rem 0.275rem -0.275rem rgba(0, 0, 0, 0.6);
+    color: #fff !important;
+}
+
+
+/* Specific font for enhance important word */
+.important {
+	color: rgb(178, 42, 42);
+	font-weight: bold;
+}
+
+/* LINKS */
+
+/* Adding Multicolumn section (the row of columns) side margins  */	
+.mcol-section {
+	margin : 0 3%;	
+}
+
+/* unvisited link */
+a:link {
+	text-decoration: none;
+	color: rgb(65,166,147);
+	/*font-weight: bold;*/
+}
+
+/* visited link */
+a:visited {
+	text-decoration: none;
+	color: rgb(204, 105, 79);
+	font-weight: bold;
+}
+
+/* mouse over link */
+a:hover {
+    color: rgb(0,136,120); 
+}
+
+/* selected link */
+a:active {
+    color: rgb(204, 105, 79);
+}
+
+#contact {
+	float: left; /*Flottant*/
+	width : 80%;
+	margin: 15px 10%; 
+	font-size: 17px;
+	font-weight: bold;
+	text-align: center;
+	vertical-align: middle;
+	box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2), 0px 1px 0px #FFF inset;
+}
+
+/* ---------------- */
+/* "LURE" SENTENCE  */
+/* ---------------- */
+
+#appat{
+	font-size: 20px;
+	font-weight: bold;
+	text-align : center;
+	font-weight: bold;
+	padding-top: 30px;
+	padding-bottom: 30px;
+	color: rgb(178, 42, 42);
+	width: 80%;
+	margin-left : 8%;
+}
+
+
+/* -------------- */
+/*    START KEY   */
+/* -------------- */
+/* - ONLY VISIBLE FOR PC USERS */
+
+#start {
+	vertical-align: middle;
+	display: block;
+	padding-bottom: 1em;
+
+}
+
+.no-mobile #start-ok {
+	display: block;
+}
+
+
+.mobile #start #startlink #startkey
+{
+	visibility: hidden !important;
+	width: 1px;
+}
+
+.no-mobile #startkey {
+	width: 56%;
+	margin-left: 22%;
+	margin-top: 15px;
+	cursor: pointer;
+}
+
+#forbidden-access
+{
+	color: rgb(142, 35, 35);
+	font-weight: bold;
+	font-size: 1.2em;
+	text-align: center;
+}
+
+
+/* -------------- */
+/*  LOGOS A GOGO  */
+/* -------------- */
+
+#banlogo {
+	display: inline-block;
+	width: 94%;
+	margin: 20px 3%;
+	text-align: center;
+	box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2), 0px 1px 0px #FFF inset;
+}
+
+.logo {
+	height: 50px; 
+	vertical-align: top;
+	margin: 4px 4px;
+	text-align: center;
+}
+
+	
+/* ------------------- */
+/*   MORE INFO SECTION */
+/* ------------------- */
+#info_legal{
+	margin-top: 20px;
+}
+
+#more_info_key{
+	margin-left: 10.5%;
+	width: 15%;
+}
+
+.more_info_disp{
+	cursor: pointer;
+}
+	
+#info_container {
+    background: rgba(250, 250, 250, 0.98) none repeat scroll 0 0; 
+	background-image: url("../img/layout/bg_wh_wall.png");
+    position: fixed;
+	margin-left: auto; 
+    top: 0px;
+    width: 100%;
+	max-width: 1200px;
+    z-index: 10;
+	height: 100%;
+}
+
+#info_div #title_info{
+	padding-left: 20px;
+	overflow: auto;
+	font-size: 34px;
+	color: rgb(152, 35, 35);
+}
+
+#info_text{
+	position: absolute;
+	width: 92%;
+	height: 80%;
+	text-align: justify;
+    vertical-align: middle;		
+	margin-left: 5%;
+	margin-right: 3%;
+	margin-top: 5px;
+	font-size: 15px;
+    line-height: 18px;
+}
+
+#info_text sup{
+	color: rgb(204, 105, 79);
+	font-weight: bold;
+	font-size: 14px;
+}
+	
+
+.legal_title{
+	font-size: 18px;
+	color: rgb(255, 235, 235);
+	font-weight: bold;
+	padding: 6px;
+	width: 30%;
+	margin-bottom: 20px;
+	margin-top: 24px;
+	text-align: left;
+}
+
+#crossClose {
+    cursor: pointer;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+}	
+
+/* ------------------- */
+/*   CONSENT SECTION */
+/* ------------------- */
+
+#consent{
+	margin-top: 20px;
+}
+	
+#consent_container {
+    background: rgba(250, 250, 250, 0.98) none repeat scroll 0 0; 
+	background-image: url("../img/layout/bg_wh_wall.png");
+    position: fixed;
+	margin-left: auto; 
+    top: 0px;
+    width: 100%;
+	max-width: 1200px;
+    z-index: 8;
+	height: 100%;
+}
+
+#consent_div #title_consent{
+	padding-left: 20px;
+	overflow: auto;
+	font-size: 34px;
+	color: rgb(152, 35, 35);
+}
+
+#consent_text{
+	position: absolute;
+	width: 88%;
+	height: 80%;
+	text-align: justify;
+    vertical-align: middle;		
+	margin-left: 5%;
+	margin-right: 3%;
+	margin-top: 5px;
+	font-size: 16px;
+    line-height: 18px;
+}
+
+#consentClose {
+    cursor: pointer;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+}	
+
+#consent_button {
+	text-align: center;
+	margin-top: 20px;
+	padding-bottom: 10px;
+	/*position : absolute;*/
+	/*margin-top: 82%;
+	margin-left: 20%;*/
+}
+#okstart {
+	width: 120px;
+	/*margin-left: 22%;
+	margin-top: 15px;*/
+}

@@ -1,0 +1,439 @@
+<!doctype html>
+<!-- How Fast Experiment --
+Online experiment based on jsPsych javascript library
+
+Experiment to record typing times associated with words typing
+Contains 3 blocks :
+-- copy of isolated words (80 words + 4 fillers)
+-- naming of images (80 images + 4 fillers)
+-- copy of sentences (9 sentences + 1 filler)
+
+* jsPsych documentation: docs.jspsych.org
+* de Leeuw, J. R. (2014). jsPsych: A JavaScript library for creating behavioral 
+* experiments in a Web browser. Behavior research methods, 1-12
+*
+* CREx-BLRI-AMU
+* https://github.com/blri/Online_experiments_jsPsych
+* 2016-12-13 christelle.zielinski@blri.fr
+**/
+--> 
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Expérience en ligne</title>
+
+		<script src="js/jquery.js"></script>
+
+		<!-- ajaxqueue used for lucky draw (to process lucky draw after saving the jspsych data with ajax) -->
+		<script src="js/ajaxqueue.js"></script>
+		
+		<!-- spy to send JavaScript errors when occurs on user's browser  
+		Simply set your email in the file jserrorhandler.php in the project directory 
+		AND uncomment the following line containing: $(document).jsErrorHandler();-->
+		<script src="js/jquery.onerror.js"></script>
+		<script>
+			$(document).jsErrorHandler();  
+		</script>
+		
+		<!-- polyfill hold javascript functions that could be missing to older browsers -->
+		<script src="js/polyfill.js"></script>
+		
+		<!-- tool to get OS/browser informations 
+		Work only when experiment is online (on a server)
+		Add the path of the WhichBrowser library inside the whichbro.js file -->
+		<script src="js/whichbro.js" defer></script> 
+		
+		<!-- jsPsych core & plugings + CSS -->		
+		<script src="lib/jspsych/jspsych.js"></script>
+		
+		<script src="lib/jspsych/jspsych_addons.js"></script> 
+		<!-- plugin for instruction screens -->
+		<script src="lib/jspsych/plugins/jspsych-text.js"></script>
+		<!-- very special plugin for edge browser (ask to maximized windows) -->
+		<script src="lib/jspsych/plugins/jspsych-resize.js"></script>
+		<!-- plugin for sentence image naming AND word copy blocks -->
+		<script src="lib/jspsych/plugins/jspsych-img-typing.js"></script>
+		<!-- plugin for sentence copy block -->
+		<script src="lib/jspsych/plugins/jspsych-txt-typing.js"></script>	
+		<!-- plugin for dispalying final survey -->
+		<script src="lib/jspsych/plugins/jspsych-form.js"></script>
+		<script src="lib/jspsych/plugins/jspsych-form-fingers.js"></script>
+
+		<link href="lib/jspsych/css/jspsych.css" rel="stylesheet" type="text/css" />
+		
+		<!-- script to define the complexe form for the last block -->
+		<script src="js/hf_form.js"></script>
+	</head>
+	
+	<body>
+	
+	</body>
+
+	<script>
+		/** -----------
+		* Very Important Parameters */
+		
+		var isdemo =  false; 
+		// In demo mode (isdemo = true), data are not saved in mySQL database but are shown as
+		// json jspsych data at the end of the experiment
+
+		/** -----------*/
+		/** DEFINITION OF STIMULI */
+		
+		/** Image naming and word copying task*/
+		
+		/* As images names and words to copy are the same, an unique array of stimuli is defined here 
+		Image paths will be built thereafter*/
+		
+		var naming_stim =  ['ananas','ancre','balai','banane','banc',
+				'bonbon','bougie','briquet','bulle','cadeau',
+				'cage','carafe','carotte','carte','cerf',
+				'chaise','chapeau','chat','chemise','cheval',
+				'citron','coeur','corne','couteau',
+				'crabe','cravate','cube','cuisine','domino',
+				'drapeau','gant','garage','gare','hibou',
+				'igloo','indien','journal','jupe','lapin',
+				'licorne','lime','lion','loup','main',
+				'maison','marin','micro','montre','moto',
+				'mouche','oeil','ours','palmier','peigne',
+				'piano','pied','pion','piscine','plante',
+				'plume','poire','poisson','poulet','puits',
+				'puzzle','robot','rose','sabot','selle','tambour',
+				'tampon','tarte','tasse','tente','tigre',
+				'tortue','vache','verre','veste','volant'];
+
+
+		// Fillers are used as training stimuli, there will be prepend to the block stimuli arrays
+		var filler_stim = ['bouton', 'crayon', 'dauphin', 'pomme'];
+		
+		/** Sentence typing task*/
+		
+		var sentences_stim = ["Vous avez reçu récemment la procédure pour mettre en place votre signature unifiée sur vos courriels.",
+		"Suite à certains problèmes récurrents, nous avons apporté quelques modifications.",
+		"Nous vous adressons aussi quelques informations complémentaires pour faciliter l’intégration de votre signature.",
+		"Votre signature est générée automatiquement depuis votre compte personnel dans l’espace numérique de travail.",
+		"Une fois la signature générée, vous devez la copier depuis votre compte personnel puis la coller dans votre logiciel de courrier habituel.",
+		"La signature devient alors modifiable librement.",
+		"Si vous rencontrez d’autres problèmes, veuillez vous rapprocher de votre référent technique habituel sur votre site en lui précisant notamment le logiciel utilisé.",
+		"Si le logo proposé ne correspond pas à votre composante, veuillez vous rapprocher de la direction des ressources humaines.",
+		"Celle-ci pourra mettre à jour vos informations dans le système d’information."];
+				
+		var filler_sentence = ["La gratification est obligatoire dès lors que le stagiaire est présent dans l'organisme d'accueil."];
+		
+		// Crop the stim if demo mode - keep only 2 stim per block
+		if (isdemo){
+			naming_stim = naming_stim[0];
+			filler_stim = filler_stim[0];
+			sentences_stim = sentences_stim[0];
+		}
+		
+		/** Define ALL BLOCKS *
+		**********************/
+		
+		/** WELCOME block message*/
+		
+		// Check if full size
+		
+		// Conditional block if not in full screen (cf. Edge)
+		function is_not_fullwindow(){
+			if (window.outerWidth < screen.width-100){
+				return true;
+			}else{
+				return false;
+			}
+		}
+		
+		var welcome_block = {
+			chunk_type : 'if',
+			timeline: [{type: 'text',
+					text: "Bienvenue sur la fenêtre d'expérience ! " +
+						"Veuillez ne pas la redimensionner. Cliquez sur la fenêtre pour commencer...",
+					cont_key: 'mouse'}],
+			conditional_function: function(){
+			return (!is_not_fullwindow());
+			}
+		};
+		
+		var resize_block = { 
+			chunk_type: 'if',
+			timeline: [{type: 'resize',
+					text: "Bienvenue sur la fenêtre d'expérience ! " +
+						"Merci de mettre cette fenêtre en plein écran (bouton du milieu en haut à droite)."}],
+			conditional_function: function(){
+				return is_not_fullwindow();
+			}
+		};
+		
+		
+		/** Image naming task */
+		
+		// Randomize images and fillers
+		var filler_stim_random = jsPsych.randomization.repeat(filler_stim, 1, 0);	 
+		var naming_stim_random = jsPsych.randomization.repeat(naming_stim, 1, 0);	
+		// Append image stimuli to fillers
+		var img_stim_word = filler_stim_random.concat(naming_stim_random);
+		
+		// Define images paths (build full paths from img_stim_word variable)
+		var imgdir = 'img/exp'; // path of directory
+		var imgform = 'bmp';    // image format
+		var img_paths = [];
+		for (var i = 0 ; i < img_stim_word.length ; i++) {
+			img_paths[i] = imgdir + '/' + img_stim_word[i] + '.' + imgform ;
+		}
+	  
+		// Try to preload images
+		var images = new Array();
+		
+		for (i = 0 ; i < img_paths.length ; i++) {
+			images[i] = new Image();
+			images[i].src = img_paths[i];
+		}
+		// Add hand image (form-finger)
+		images[img_paths.length] = new Image();
+		images[img_paths.length].src = 'img/form/hf_fing_bg.png';
+		
+		
+		// Instructions for image-naming block
+		var img_intro = {
+			type: 'text',
+			text: "<p class='title'>Dénomination d'images</p>" +
+				"<p>Dans cette partie, vous allez devoir <b>écrire le nom</b> des objets présentés à l'écran "+
+				"le plus rapidement possible et en faisant le moins d'erreurs possible.</p>"+
+				"<p>Lorsque vous avez fini de taper, appuyez sur <b>Entrée</b> pour valider et passer à l'image suivante.</p>"+
+				"<p>Vous pouvez reposer vos mains quelques instants avant d'appuyer sur <b>Entrée</b>.</p>"+
+				"<p>A la fin de cette partie, vous pourrez connaître votre vitesse de frappe.</p>"+
+				"<p>Positionnez vos mains sur le clavier et tenez-vous prêt !</p>"+
+				"<p>Appuyer sur une touche pour lancer cette partie...</p>",
+			progbar: true,
+			timing_post_trial: 800
+		};	
+		
+		// Images naming block of trials
+		var img_block = {
+			type: "img-typing",
+			img_names: img_stim_word,
+			img_paths: img_paths,
+			validresp: 13, // Key to valid response (13 = Enter)
+			timing_interstim: 800
+		};
+
+		
+		/** Word copying task */
+		
+		// Randomize words and fillers
+		var filler_stim_random = jsPsych.randomization.repeat(filler_stim, 1, 0);	 
+		var naming_stim_random = jsPsych.randomization.repeat(naming_stim, 1, 0);	     		
+		var wd_stim_random = filler_stim_random.concat(naming_stim_random);		
+		
+		// Instruction for word copying block
+		var wd_intro = {
+			type: 'text',
+			text: "<p class='title'>Copie de mots</p>" +
+				"<p>Dans cette partie, vous allez devoir <b>copier des mots</b> présentés à l'écran "+
+				"le plus rapidement possible et en faisant le moins d'erreurs possible.</p>"+
+				"<p>Lorsque vous avez fini de taper, appuyez sur <b>Entrée</b> pour valider et passer au mot suivant.</p>"+
+				"<p>Vous pouvez reposer vos mains quelques instants avant d'appuyer sur <b>Entrée</b>.</p>"+
+				"<p>A la fin de cette partie, vous pourrez connaître votre vitesse de frappe.</p>"+
+				"<p>Positionnez vos mains sur le clavier et tenez-vous prêt !</p>"+
+				"<p>Appuyer sur une touche pour lancer cette partie...</p>",
+			progbar: true,
+			timing_post_trial: 800
+		};	
+		
+		// Word copying block of trials
+		var wd_block = {
+		  type: "img-typing",
+		  stimuli: wd_stim_random,
+		  validresp: 13, // Key to valid response (13 = Enter)
+		  timing_interstim: 800
+		};	
+		
+	
+		/**  Sentence typing test */
+		
+		// Sentences array
+		var sent_stim = filler_sentence.concat(sentences_stim);
+		
+		// Instructions for sentence typing
+		var txt_intro = {
+			type: 'text',
+			text: "<p class='title'>Copie de phrases</p>" +
+				"<p>Dans cette partie, vous allez devoir <b>copier des phrases</b> présentées à l'écran "+
+				"le plus rapidement possible et en faisant le moins d'erreurs possible.</p>"+
+				"<p>Lorsque vous avez fini de taper, appuyez sur <b>Entrée</b> pour valider et passer à la phrase suivante.</p>"+
+				"<p>Vous pouvez reposer vos mains quelques instants avant d'appuyer sur <b>Entrée</b>.</p>"+
+				"<p>A la fin de cette partie, vous pourrez connaître votre vitesse de frappe.</p>"+
+				"<p>Positionnez vos mains sur le clavier et tenez-vous prêt !</p>"+
+				"<p>Appuyer sur une touche pour lancer cette partie...</p>",
+			progbar: true
+		};	
+	
+		var txt_block = {
+			type: 'txt-typing',
+			valid: {type: 'key',
+					val: 13},
+			stimuli: sent_stim,
+			timing_interstim: 800
+		};
+		
+
+		/**  Survey blocks */
+		/* Define in a separate function to gain in readability */
+		var form_blocks = define_form_blocks(); 
+		
+		/** Merci */
+		var merci = "<p class='large'> Merci de votre participation ! Vous pouvez fermer cette fenêtre.</p>";
+
+		/**----------   WHOLE EXPERIMENT STRUCTURE **/
+		
+		/** RANDOMISE blocks 
+		and add FEEDBACK screens (with typingFeedbackBlock function defined in in jspsych_addons script)*/
+		
+		var alltrialtyp = ["img-typing", "wd-typing", "txt-typing"]; 
+		// alltrialtyp is required by typingFeedbackBlock to know which data to use for the mean time calculations
+		
+		// Array of embedded blocks (instruction, trials, feedback) 
+		var allblocks = [[img_intro, img_block, jsPsych.typingFeedbackBlock(alltrialtyp)], 
+						[wd_intro, wd_block, jsPsych.typingFeedbackBlock(alltrialtyp)], 
+						[txt_intro, txt_block, jsPsych.typingFeedbackBlock(alltrialtyp)]];
+							
+		// Randomize the 3 parts
+		var randblocks = jsPsych.randomization.repeat(allblocks, 1, 0);
+		
+		// Define the string that holds the order of the blocks (will be saved in one of the database columns)
+		// example: blocks_order = "blocksorder_txt_img_wd" 
+		var blocks_order = "blocksorder";
+		for (var k = 0 ; k < randblocks.length ; k++) {
+			if (randblocks[k][1].type == 'img-typing') {
+				if (typeof randblocks[k][1].img_paths == 'undefined'){
+					// Check if word block
+					blocks_order = blocks_order + "_wd";
+				}else{
+					blocks_order = blocks_order + "_img";
+				}
+			}else{
+				blocks_order = blocks_order + "_txt";
+			}	
+		}
+		// Concatenate the blocks (remove subarrays)
+		var inityp = [];
+		var typing_blocks = inityp.concat.apply([], randblocks);
+		
+		/** THE WHOLE EXPERIMENT STRUCTURE */
+		
+		var experiment = [];
+		
+		experiment.push(welcome_block);	
+		experiment.push(resize_block);	
+		
+		experiment = experiment.concat(typing_blocks);	
+		
+		experiment = experiment.concat(form_blocks);
+		
+		// Put progress bar string in blocks parameters 
+		// (depending of total number of blocks involving progbar display ({progbar: true})
+		jsPsych.prepareProgressBar(experiment);
+		
+		// subjID will be add in the database - based on the exact date when user was starting the experiment
+		var subjID = jsPsych.getSubjectID();
+		
+		/**------- STORE DATA TO MSQL DATABASE function */
+		// Function for writing the data in mysql database
+		// The database HAVE TO BE CONFIGURED
+		// ACCESS TO DATABASE IS DEFINED IN db / db_save.php 
+		function save_data(subjID, subjinfo, blocksorder, data){
+			return { 
+				type:'post',
+				cache: false,
+				url: 'db/db_save.php', 
+				data: {
+					subjid: subjID,
+					subjinfo: subjinfo,
+					blocksorder: blocksorder,
+					json: JSON.stringify(data)
+				}
+			}
+		}
+		
+		/**-------- Function for the LUCKY DRAW */
+		// each Ngap participants, a subject is defined as a winner (Ngap, Ngap*2, Ngap*3...)		
+		
+		function lucky_draw(){
+			return{   
+				type: 'get',
+				url: 'db/db_luckydraw.php', 
+				dataType: 'json',
+				success: function(data) { 
+					if (data.winflag == 1){
+						var luckres = "<p class='large'> Merci de votre participation ! "+
+							"<p class='large'>Résultat du tirage : Vous avez gagné 50€ !</p>" +
+							"<p> Pour les recevoir, veuillez envoyer un mail à marieke.longcamp@univ-amu.fr en précisant le code : </p>" +
+							"<p class='large center-content'><br>" + data.alphacode + "</br></p>" +
+							"<div class='fb_info'>Ce code est unique par gagnant. Il est tiré au sort parmi une liste "+
+							" prédéfinie. La procédure utilisée garantit l'anonymat des données (aucun lien"+
+							" ne peut être établi entre les données de l'expérience et l'identité du gagnant).</div>"+
+							"<p>Vous pouvez fermer cette fenêtre quand vous le souhaitez.</p>";
+					} else {
+						var luckres = "<p class='large'> Merci de votre participation ! "+
+							"<p class='large'>Résultat du tirage : Vous n'avez pas gagné, dommage !</p>" +
+							"<p>Vous pouvez fermez cette fenêtre.</p>";				
+					}
+					
+					$("body").html(luckres);
+					// $("body").html(JSON.stringify(data)); 
+				},
+				error : function(resultat, statut, erreur){
+					console.log(resultat);
+				}
+			}
+		}
+		
+		/** GO ! Start the experiment */
+		jsPsych.init({
+			experiment_structure: experiment,
+			on_finish: function(){ 	
+			
+				// Save all the data in the database
+				if (!isdemo){
+					// Add merci
+					// $("body").html(merci);
+				
+					// Adding user's browser and OS infos (as a unique string)
+					if (typeof WhichBrowser == "undefined") {
+						var subjinfo = 'Unable_whichbro';
+					}else{
+						// New WhichBrowser object
+						Browsers = new WhichBrowser();					
+						var subjinfo = "";
+						subjinfo += 'OS_' + Browsers.os.name;
+						if (Browsers.os.version != null) {
+							subjinfo += '_' + Browsers.os.version;
+						}
+						subjinfo += '_Brows_' + Browsers.browser.name+'_'+ Browsers.browser.version.original;
+						subjinfo += '_Devtyp_'+ Browsers.device.type;
+						
+						// Remove blanks
+						subjinfo = subjinfo.replace(/\s+/g, '');
+					};
+					
+					// All jsPsych data
+					var alldata = jsPsych.data.getData();	
+					
+					// Save 		
+					$.ajaxQueue(save_data(subjID, subjinfo, blocks_order, alldata));
+		
+					// Check if subject is the winner of the day !!!
+					$.ajaxQueue(lucky_draw());
+				}
+				
+				// Display all data on the page (debug mode)
+				if (isdemo){ 
+					$("body").html("jspsych data :");
+					jsPsych.data.displayData(); 
+				}
+			}	
+		}); 
+	</script> 
+
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>   
+<!-- HowFast - typing experiment
+
+Home page with the link to launch the experiment in full screen 
+
+Experiment is defined in hf_exp.html and based on jsPsych library
+
+-----------
+
+* jsPsych documentation: docs.jspsych.org
+* de Leeuw, J. R. (2014). jsPsych: A JavaScript library for creating behavioral 
+* experiments in a Web browser. Behavior research methods, 1-12
+*
+* CREx-BLRI-AMU
+* https://github.com/blri/Online_experiments_jsPsych
+* 2016-12-13 christelle.zielinski@blri.fr
+**/-->
+<html>   
+	<head>  
+		<meta charset="utf-8" />
+		
+		<title>How Fast</title>
+		
+		<script src="//wurfl.io/wurfl.js">
+			// WURFL Device Detection // http://web.wurfl.io	
+		</script>
+
+		<script src="js/jquery.js"></script>
+		
+		<script src="js/jquery.onerror.js">
+			// https://github.com/posabsolute/jQuery-Error-Handler-Plugin
+		</script>
+		<script>
+	//		$(document).jsErrorHandler();
+		</script>
+		
+		<!-- Add informations on bottom section - infotxt is return -->
+		<script src="js/hf_infos.js"></script>
+
+		<!-- Add informations on bottom section - infotxt is return -->
+		<script src="js/hf_consent.js"></script>
+		
+		<!-- Open online experiment in a full screen (S. Mathôt) cogsci.nl -->
+		<script>
+			function openfullscreen(url) {
+				newwin = window.open("", "", "scrollbars")
+				newwin.moveTo(0, 0)
+				newwin.resizeTo(screen.width, screen.height)
+				newwin.location = url
+			}
+		</script>
+		
+		<!-- Main layout -->
+		<link rel="stylesheet" href="css/hf_home.css" />
+		<link rel="shortcut icon" href="img/layout/favicon.ico">
+		
+		<!-- Functions to customize scroll bars (cf. for abstracts of projects in info slide -->
+		<!-- http://manos.malihu.gr/jquery-custom-content-scroller/ -->
+		<script src="lib/scrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
+		<link href="lib/scrollbar/jquery.mCustomScrollbar.css" rel="stylesheet" />	
+		
+		
+	</head>
+	
+	<body>
+
+		<header>
+		<img class="hlogo" src="img/layout/hf_logo.png"/>
+			 <div id="catch">
+				<p>Participez à notre expérience en ligne</p>
+			</div>
+		</header>			
+			
+		<section class="mcol-section">
+			
+			<div class="col"> 
+				<p class="info-title shabox">Pourquoi ?</p> 
+				<p>Le but de cette étude est d’évaluer les capacités de frappe au clavier de la population étudiante. A travers plusieurs courts tests, nous allons mesurer votre vitesse de frappe.
+				</p> 
+			</div>
+		
+			<div class="col"> 
+				<p class="info-title shabox">Comment ?</p>
+				<p>Cette expérience permettra de mesurer votre vitesse de frappe dans différents contextes. 
+				Les données collectées sont totalement <span class="important more_info_disp">anonymes</span>. Vous pouvez décider de quitter l'expérience à tout moment. Les données ne sont enregistrées qu'à la toute fin de l'expérience. Elles sont destinées à des analyses scientifiques : <strong>il est très important, pour la validité de ces analyses, que vous ne passiez l'expérience qu'une fois.</strong>
+				</p>				
+			</div>
+			
+			<div class="col">
+				<p class="info-title shabox">Qui sommes-nous ?</p> 
+				<p>Cette étude est réalisée sous l'initiative de chercheurs d'<a target="_blank" href="http://www.univ-amu.fr/">Aix-Marseille Université</a>. Elle est le fruit 
+				d'une collaboration entre le <a target="_blank" href="http://lpc.univ-amu.fr/">Laboratoire de Psychologie Cognitive</a> 
+				et le <a target="_blank" href="http://lnc.univ-amu.fr/">Laboratoire de Neurosciences Cognitives</a>,
+				et a bénificié du soutien du <a target="_blank" href="http://blricrex.hypotheses.org/">Centre de Ressources pour l'Expérimentation</a> du <a target="_blank" href="http://www.blri.fr/">Brain and Language Research Institute</a>. 
+				</p>
+			</div>
+
+			<div class="cf"></div>
+			
+		</section>
+		
+		<section id="appat">
+			A la fin de cette expérience, vous gagnerez peut-être un bon d'achat de 50€.
+			<!--En raison d'un grand nombre de participations, cette expérience est en pause. Nous vous préviendrons en début janvier si elle reprend. Merci de votre intérêt.-->
+		</section> 
+		
+		<section class="mcol-section">
+			
+			<div class="col"> 
+				<div id="contact">
+					<p>Des questions ?<br>Suivre l'avancée de l'étude ?<br>Contactez nous !<br> marieke.longcamp (at) univ-amu.fr</p>
+				</div> 
+			</div>
+		
+			<div class="col"> 	
+				<div id="start"> 
+					<div id="no-start"></div>
+					<div class="start-ok">
+						<img id="startkey" src="img/layout/key_start.png" title="Commencer l'expérience"/>
+					</div>
+				</div>
+			</div>	
+
+
+			<div class="col">
+				<div id="banlogo">
+					<a target="_blank" href="http://www.univ-amu.fr/">
+						<img class="logo" src="img/layout/logo_amu.png" alt="Logo AMU" title="Vers le site d'Aix-Marseille Université" /></a>
+					<a target="_blank" href="http://www.cnrs.fr/">
+						<img class="logo" src="img/layout/logo_cnrs.png" alt="Logo CNRS" title="Vers le site du CNRS" /></a>
+					<a target="_blank" href="http://lnc.univ-amu.fr/">
+						<img class="logo" src="img/layout/logo_lnc.png" alt="Logo LNC" title="Vers le site du Laboratoire de Neurosciences Cognitives" /></a>
+					<a target="_blank" href="http://lpc.univ-amu.fr/">
+						<img class="logo" src="img/layout/logo_lpc.png" alt="Logo LPC" title="Vers le site du Laboratoire de Psychologie Cognitive" /></a>
+					<a target="_blank" href="http://www.blri.fr/">
+						<img class="logo" src="img/layout/logo_blri.png" alt="Logo BLRI" title="Vers le site du Brain & Language Research Institute" /></a>
+					<a target="_blank" href="http://www.jspsych.org/">
+						<img class="logo" src="img/layout/logo_jspsych.png" alt="Logo jsPsych" title="Vers le site de jsPsych" /></a>
+				</div>
+			</div>
+
+			<div class="cf"></div>
+			
+		</section>
+
+		<section id="info_legal">
+			<div id="more_info"> <img id="more_info_key" class="more_info_disp" src="img/layout/key_more_info.png" title="Mentions légales, anonymat..."/></div>
+			
+			<div id="info_container" style="display: none;">
+				<div id="info_div">
+				</div>
+			</div>
+			
+		</section>
+		
+		<section id="consent">			
+			<div id="consent_container" style="display: none;">
+				<div id="consent_div">
+					<div id="consent_text">
+						 <div id="consent_button"> 
+							<a id = "okstartlink" href="#" onclick="openfullscreen('hf_exp.html'); return false;">
+								<img id="okstart" src="img/layout/key_start.png" title="Ouvre l'expérience dans une nouvelle fenêtre"/>
+							</a> 
+						</div>
+						<div class="more_info_disp">Pour plus d'informations (anonymat, mentions légales...), cliquez <span class="important">ici</span>.</div>
+					</div>
+
+				</div>	
+
+			</div>
+			
+		</section>
+						
+	</body>
+	
+	
+	<script>
+	
+		// Forbidden Experiment launch if tablet or smartphone
+		// as detect by WURFL => the start key is not display
+		if (typeof WURFL == 'undefined') {
+			var WURFL = {
+				is_mobile: false
+			};
+		}
+		
+		document.documentElement.className += ' ' + (WURFL.is_mobile ? '' : 'no-') + 'mobile';
+		if ( WURFL.is_mobile == true ) { 
+			var pmob = document.createElement('p');
+			pmob.id = 'forbidden-access';
+			document.getElementById('no-start').appendChild(pmob);
+			var txtmob = document.createTextNode("Cette expérience n'est accessible qu'aux utilisateurs de clavier mécanique (et non tactile).");
+			pmob.appendChild(txtmob);
+			$('#startkey').css('visibility', 'hidden');
+			$('#startkey').remove();
+		}
+		
+		// Add More informations section
+		var infostr = "<h1><span id='title_info'>Informations</span><img src='img/layout/close_cross.png' id='crossClose'/></h1>";
+		infostr += "<div id='info_text'>" + infotxt + "</div>";
+	
+		$('#info_div').html(infostr);
+		
+		// Add customized scrollbar
+		$.mCustomScrollbar.defaults.scrollButtons.enable = true; //enable scrolling buttons by default
+		$.mCustomScrollbar.defaults.axis = "yx"; //enable 2 axis scrollbars by default
+		$.mCustomScrollbar.defaults.scrollInertia = 150;
+		$("#info_text").mCustomScrollbar({theme:"dark-thin"});
+		
+		// Display the more_info div when click on it
+		$('.more_info_disp').click(function(){	
+			$("#info_container").fadeIn(500);
+			$("#crossClose").click(function(){$("#info_container").fadeOut(500)});				
+		});
+		
+
+		// Add consent section
+		var constit = "<h1><span id='title_consent'>Consentement de participation</span><img src='img/layout/close_cross.png' id='consentClose'/></h1>";
+		$('#consent_div').prepend(constit);
+/*			consstr += "<div id='consent_text'>" + consentxt + "</div>";
+	"<div id='consent_button'>"+
+						'<a id="okstartlink" href="#" onclick="openfullscreen(''hf_exp.html''); return false;">'+
+							"<img id='okstart' src='img/layout/key_start.png' title='Ouvre l'expérience dans une nouvelle fenêtre'/>"+
+						"</a> "+
+					"</div><p>Plus d’informations sont disponibles ici.</p></div>";*/
+		$('#consent_text').prepend(consentxt);
+		
+		$("#consent_text").mCustomScrollbar({theme:"dark-thin"});
+		
+		// Display the consent_div div when click on start key
+		$('#startkey').click(function(){	
+			$("#consent_container").fadeIn(500);
+			$("#consentClose").click(function(){$("#consent_container").fadeOut(500)});				
+		});		
+
+	</script>
+
+</html>
